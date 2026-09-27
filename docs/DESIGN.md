@@ -1,7 +1,15 @@
 # Median Depot Design Brief
 
 **Recorded:** September 27, 2026  
-**Status:** A revisable design record from the initial brainstorm. Features described here are planned, not implemented.
+**Status:** A revisable design record from the initial brainstorm. Version 0.1.0 now implements the sorting-and-odd-median foundation in a small 3D yard. The broader features below remain planned unless documented as implemented in the README.
+
+## Issue #1 Decisions
+
+- Three.js and Vite, served as a static browser game; see [Runtime and Launch Decision](RUNTIME.md).
+- Original rounded timber crates with unchanged numeric labels, persistent crate IDs, and separate row-position labels. Every crate is the same physical size; size does not encode quantity.
+- Two immutable five-crate shipments: the first design example and an odd-count duplicate example. Codes restore both data and initial arrival order.
+- 3D dragging, click/tap selection with Move buttons, and keyboard movement all use the same pure data operations. Correct sorting unlocks middle-crate selection and numeric submission.
+- A simple procedural yard establishes the requested cartoony but professional appearance. It does not settle shared asset ownership or build the factory opening. That remains Issue #2; no companion repository is changed.
 
 ## Confirmed Direction
 

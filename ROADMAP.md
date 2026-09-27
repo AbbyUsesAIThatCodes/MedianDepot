@@ -2,7 +2,7 @@
 
 Recorded September 27, 2026 from the teacher-and-Rowan brainstorm.
 
-**Current State:** Planning only. This document records the intended direction; it does not claim that any gameplay, art, hosting, or integration exists. All implementation issues below are open at the time of writing.
+**Current State:** Version 0.1.0 implements the Issue #1 foundation: a small procedural 3D yard, two reproducible five-crate shipments, intact-crate sorting, and odd-count median selection and submission. Local browser launch and a Pages workflow are included. The shared factory opening, pair assistance, even counts, teaching modes, and worksheets remain future work. Deployment status is separate from implementation status.
 
 See the [Design Brief](docs/DESIGN.md) for teaching mechanics, examples, and the distinction between confirmed direction and proposed details.
 
@@ -71,7 +71,7 @@ Preparing stable shipment codes early is useful; building worksheet integration 
 
 ## Open Decisions
 
-- Runtime/engine and classroom hosting route.
+- Shared-world integration on the selected Three.js/Vite static-browser runtime; confirm classroom Pages deployment and actual device performance.
 - Shared asset ownership, source locations, versioning, and synchronization with Mean Machine.
 - Exact crate design and how quantities are visible.
 - Dataset sizes, value ranges, curated versus generated shipments, and progression.
@@ -82,8 +82,8 @@ These choices should be resolved in the relevant issue rather than silently trea
 
 ## Next Handoff
 
-Start a new implementation conversation with [Issue #1](https://github.com/AbbyUsesAIThatCodes/MedianDepot/issues/1):
+After the Issue #1 PR is reviewed and merged, the next implementation handoff is [Issue #2](https://github.com/AbbyUsesAIThatCodes/MedianDepot/issues/2):
 
-> Implement Median Depot Issue #1 as one focused PR. Read README.md, ROADMAP.md, and docs/DESIGN.md first. Build the smallest playable sorting-and-odd-median loop, preserve all crate observations, and document the runtime choice, shipment replay behavior, and verification.
+> Build on the Three.js foundation. Inspect the companion Mean Machine repository, settle reusable asset ownership and versioning, and implement the shared factory exterior and exterior-to-yard opening. Preserve the tested crate identities, replay contract, and sorting-and-answer flow. Keep a static or skippable camera route.
 
-Keep later issues open until their implementation and acceptance criteria are satisfied. The documentation PR records this plan; it does not complete the game issues.
+Keep later issues open until their implementation and acceptance criteria are satisfied. The simple depot art in Issue #1 does not complete the shared-world scope of Issue #2.
