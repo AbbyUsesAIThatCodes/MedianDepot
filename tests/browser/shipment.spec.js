@@ -202,11 +202,12 @@ test('fullscreen preserves the in-progress overlay state', async ({ page }) => {
   await choose(page, 'C04');
   await page.getByRole('button', { name: 'Move Selected Crate Left' }).click();
   await page.getByRole('button', { name: 'Enter Fullscreen' }).click();
-  await expect.poll(() => page.evaluate(() => Boolean(document.fullscreenElement))).toBe(true);
+  // Software rendering can block a fullscreen state read for over five seconds.
+  await expect.poll(() => page.evaluate(() => Boolean(document.fullscreenElement)), { timeout: 15000 }).toBe(true);
   expect(await values(page)).toEqual(['8', '2', '4', '18', '3']);
   await expect(picker(page)).toHaveValue(/-C04$/);
   await page.getByRole('button', { name: 'Exit Fullscreen' }).click();
-  await expect.poll(() => page.evaluate(() => Boolean(document.fullscreenElement))).toBe(false);
+  await expect.poll(() => page.evaluate(() => Boolean(document.fullscreenElement)), { timeout: 15000 }).toBe(false);
   expect(await values(page)).toEqual(['8', '2', '4', '18', '3']);
 });
 

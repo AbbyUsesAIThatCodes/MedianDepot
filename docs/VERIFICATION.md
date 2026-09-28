@@ -43,6 +43,8 @@ The test configuration accepts `PLAYWRIGHT_CHROMIUM_EXECUTABLE` for an existing 
 
 GitHub Actions run [36362974784](https://github.com/AbbyUsesAIThatCodes/MedianDepot/actions/runs/36362974784) passed the data tests and build, but three of the ten browser scenarios exhausted the original 30-second test budget. Local screenshot runs had a 60-second budget and explicit software WebGL flags; CI had neither. The configuration now applies that same budget and renderer setup to both environments, retaining every scenario and assertion. Failed browser runs retain traces, screenshots, and error contexts in the `browser-test-failures` workflow artifact for seven days. The list reporter records individual scenario durations in the job log.
 
+The next run passed all three original failures but exposed a separate fullscreen assertion timeout. Its trace showed the browser state read returning `true` after 5.2 seconds, just beyond the default five-second assertion deadline; the error snapshot also showed **Exit Fullscreen**. Only the enter/exit fullscreen polling assertions now allow 15 seconds for that asynchronous transition. They still require the real Fullscreen API state and preserve the crate-order and selection checks; other assertions retain their existing deadlines.
+
 ## Practical Limits
 
 Actual student Windows laptops and the classroom ViewBoard have not been physically tested. The primary remaining classroom checks are mouse/trackpad feel, label readability at classroom distance, and GPU performance. Firefox/Safari and dedicated screen-reader testing have not been performed. Phones are outside the target device scope.
