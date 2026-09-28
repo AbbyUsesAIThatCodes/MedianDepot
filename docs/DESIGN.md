@@ -1,7 +1,7 @@
 # Median Depot Design Brief
 
 **Recorded:** September 27, 2026  
-**Status:** A revisable design record from the initial brainstorm. Version 0.1.0 now implements the sorting-and-odd-median foundation in a small 3D yard. The broader features below remain planned unless documented as implemented in the README.
+**Status:** A revisable design record from the initial brainstorm. Version 0.2.0 implements the sorting-and-odd-median foundation in a full-window 3D yard with collapsible controls. The broader features below remain planned unless documented as implemented in the README.
 
 ## Issue #1 Decisions
 
@@ -153,6 +153,8 @@ Worksheet integration comes later, after the game is playable and the current wo
 The format, exports, automatic transfers, and external services remain undecided. Stable codes do not imply accounts or student-data collection.
 
 ## Classroom Use and Presentation
+
+**Teacher clarification, September 27, 2026:** All educational games target student laptops. Phone-specific layouts, screenshots, and testing are out of scope. The Issue #11 overlay replaces the former bottom Crate Quantities strip with a compact native selector in Yard Controls. Keep keyboard and mouse/trackpad access as well as classroom display readability.
 
 Plan for the classroom ViewBoard and student computers:
 

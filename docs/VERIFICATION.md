@@ -1,34 +1,33 @@
-# First Shipment Verification
+# Full-Window Yard Verification
 
-Verified September 27, 2026 for version 0.1.0 and Issue #1.
+Verified September 27, 2026 for version 0.2.0 and Issue #11. The teacher's target is student laptops; phone-specific verification is out of scope.
 
 ## Environment
 
 - Node.js 24.19.0 and npm 11.9.0 on Linux.
 - Playwright 1.63.0 with headless Chromium 153.0.8010.0 and software WebGL rendering.
-- Desktop: 1440 × 1000; resize coverage: 1024 × 768 and 390 × 844; touch emulation: 390 × 844.
-- Production output additionally served under `/MedianDepot/`, matching a GitHub Pages project path.
+- Window sizes: 1024 × 600, 1280 × 720, 1366 × 768, 1440 × 1000, and 1920 × 1080.
 
 ## Checks
 
 | Check | Result |
 | --- | --- |
-| `npm test` | 8 passing tests |
-| Shipment data preservation | Every permutation of both five-crate shipments, every crate, and every in-range destination plus the two out-of-range boundaries retain all IDs and values |
-| First shipment | Arrival 8, 2, 18, 4, 3 → sorted 2, 3, 4, 8, 18 → select middle crate and submit 4 |
-| Duplicate shipment | Both equal-value identity orders sort correctly; selecting the other quantity-4 crate is rejected when it is not in the middle |
-| Wrong submissions | Unsorted order, missing selection, wrong crate, blank/nonfinite input, row-position answer, and incorrect numeric answer are rejected without data changes |
-| Replay and identity | Reset/reload restore code-specific arrival order; manifest retains original IDs and quantities; unknown codes show a notice |
-| Browser interaction | 9 Playwright scenarios: full loop, duplicates, manifest/replay codes, resizing/reduced motion, keyboard, touch, renderer fallback, 3D dragging, fullscreen |
-| Direct 3D input | Actual raycast selection and dragging, including dragging outside the canvas, preserve whole crates |
-| Keyboard and touch | Full touch playthrough without dragging; keyboard reorder retains focus; dialogs close with Escape and restore focus |
-| Renderer fallback | Deliberately unavailable WebGL still permits a complete sorting-and-answer loop via HTML controls |
-| Production build | `npm run build` passes; bundled app at `/MedianDepot/` loads 3D and completes median 4 with no page errors, HTTP failures, or external requests |
-| Visual review | Desktop initial/completed states and mobile state inspected for framing, labels, clipping, selection cues, and controls |
+| Data tests | 8 passing tests, retaining the original sorting/median/identity coverage |
+| Shipment preservation | Every permutation of both shipments and every crate/destination move retain the original IDs and quantities |
+| Browser tests | 10 passing scenarios covering both shipments, feedback, replay, manifest, overlays, keyboard input, resizing, fullscreen, renderer fallback, and actual 3D dragging |
+| Full-window canvas | Canvas bounds match the viewport; no permanent bottom quantities row or page scrolling |
+| Laptop resizing | Overlay stays inside the viewport; shorter windows scroll internally; selection/order remain unchanged |
+| Overlay toggles | Hide/reopen preserves order, selected crate, lesson phase, and an unfinished numeric answer |
+| Keyboard access | Native crate selector and Move buttons work; movement retains focus; Escape hides the panel and returns focus; dialogs retain their own Escape behavior |
+| Crate visibility and picking | All five crates can be selected through the actual 3D view outside the open overlay; dragging between the first and last bays preserves observations |
+| Complete alternative flow | A 1024 × 600 laptop window completes the entire shipment through the selector and Move buttons without dragging |
+| Renderer fallback | With WebGL deliberately disabled, accessible overlay controls still complete the sorting-and-answer loop |
+| Build | `npm run build` passes; relative asset paths and the existing Pages workflow are retained |
+| Visual inspection | Open/closed overlay, completed shipment, 1366 × 768 laptop, and 1024 × 600 compact-window captures checked for framing, clipping, labels, and selection |
 
 ## Repeat Locally
 
-Review captures: [Desktop Yard](images/median-depot.png) and [Mobile Layout](images/mobile.png).
+Review captures: [Laptop Yard](images/median-depot.png) and [Controls Hidden](images/unobstructed-yard.png).
 
 ```sh
 npm ci
@@ -38,12 +37,12 @@ npx playwright install chromium
 npm run test:browser
 ```
 
-The test configuration accepts `PLAYWRIGHT_CHROMIUM_EXECUTABLE` for an existing Chromium binary. `CAPTURE_DIR` optionally saves screenshots and extends the per-test timeout to allow slow software rendering. Neither variable is required for normal local/CI tests. The default Playwright browser download was unavailable in the authoring environment, so its equivalent npm-distributed Chromium binary was used there; CI uses Playwright's normal browser installation.
+The test configuration accepts `PLAYWRIGHT_CHROMIUM_EXECUTABLE` for an existing Chromium binary. `CAPTURE_DIR` optionally saves screenshots and extends the per-test timeout for software rendering. Neither variable is required for normal local/CI tests. The authoring environment uses an npm-distributed Chromium binary because its normal Playwright browser download was unavailable; CI uses Playwright's normal browser installation.
 
-## Review Before Classroom Use
+## Practical Limits
 
-The classroom ViewBoard, student Windows machines, actual touch hardware, and Firefox/Safari have **not** been physically tested. A quick teacher playtest on those devices remains useful, especially for touch accuracy, label size at classroom distance, and GPU performance. Touch emulation is not a hardware certification. Screen-reader semantics and keyboard behavior are implemented, but no dedicated screen-reader audit is claimed.
+Actual student Windows laptops and the classroom ViewBoard have not been physically tested. The primary remaining classroom checks are mouse/trackpad feel, label readability at classroom distance, and GPU performance. Firefox/Safari and dedicated screen-reader testing have not been performed. Phones are outside the target device scope.
 
-The build reports a non-fatal bundle-size advisory: the Three.js application is approximately 589 kB minified / 152 kB gzip. The renderer draws on changes rather than continuously while idle. Actual classroom frame rate has not been measured.
+The unchanged Three.js bundle triggers a non-fatal size advisory: approximately 589 kB minified / 152 kB gzip. The renderer draws on changes rather than continuously while idle. The camera adjusts framing when the overlay or viewport changes; crate data and game progress stay intact.
 
-Pages requires the repository's Pages source to be set to GitHub Actions and a successful `main` deployment. This implementation PR does not establish that a public deployment is live. The current scene has a fixed teaching camera; shared factory art, the opening camera move, and final asset sharing remain Issue #2. Pair assistance, even counts, teaching modes, and worksheets remain Issues #3–#8.
+PR deployment occurs through the existing Pages workflow after merge to `main`. This PR does not change Pages settings. Shared-factory art and the opening sequence remain Issue #2; pair assistance, even counts, teaching modes, and worksheets remain Issues #3–#8.

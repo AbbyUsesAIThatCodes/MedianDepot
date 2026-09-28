@@ -5,7 +5,7 @@ const COLORS = { wood: '#dcb474', edge: '#a87741', teal: '#357779', dark: '#254a
 const SPACING = 2.65;
 const xFor = index => (index - 2) * SPACING;
 
-export function createDepot(container, { onSelect, onMove, onUnavailable, reducedMotion }) {
+export function createDepot(container, { onSelect, onMove, onUnavailable, reducedMotion, viewBounds }) {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color('#dce7dc');
   const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 160);
@@ -288,9 +288,12 @@ export function createDepot(container, { onSelect, onMove, onUnavailable, reduce
   function resize() {
     const { width, height } = container.getBoundingClientRect();
     if (!width || !height) return;
-    camera.aspect = width / height;
-    // Frame the complete sorting row at every aspect ratio without changing game state.
-    const distance = camera.aspect < 1.45 ? 25 * (1.45 / camera.aspect) : 25;
+    const safe = viewBounds();
+    const aspect = safe.width / safe.height;
+    // Render edge to edge, but frame the teaching area in the space clear of overlays.
+    // A view offset moves the optical center without skewing the crate row.
+    camera.setViewOffset(width, height, width / 2 - (safe.x + safe.width / 2), height / 2 - (safe.y + safe.height / 2), width, height);
+    const distance = 24 * Math.max(1, 1.45 / aspect) * height / safe.height;
     camera.position.set(distance * 0.16, distance * 0.49, distance * 0.83);
     camera.lookAt(target);
     camera.updateProjectionMatrix();

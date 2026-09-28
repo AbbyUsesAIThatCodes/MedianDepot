@@ -11,3 +11,9 @@ Shipments are curated and versioned, not randomly generated. `MD-1-001` identifi
 Reset, reload, and a URL with `?shipment=MD-1-001` restore the exact arrival order and clear selection, feedback, and completion. A code does not restore an in-progress arrangement. Unsupported codes display an explicit notice before using the default; they never silently resolve to different data. The original arrival list remains available in the Shipment Manifest.
 
 Local launch, controls, and build commands are maintained in the README. A GitHub Pages workflow will build static assets on merge to `main`; the repository owner must enable Pages with GitHub Actions as its source. A submitted PR is not a published classroom URL.
+
+## Full-Window Overlay Update (Version 0.2.0)
+
+Issue #11 replaces the surrounding page layout and bottom quantities strip with an edge-to-edge canvas and a collapsible Yard Controls overlay. A native crate selector and Move buttons preserve keyboard access without duplicating a permanent row of quantity cards. The perspective camera frames the same yard inside the clear area beside the overlay using a view offset; toggles do not mutate game state. Short laptop windows scroll inside the overlay.
+
+The teacher clarified that student laptops are the target across all educational games. Phone-specific layout and testing are out of scope. Keep mouse/trackpad and keyboard operation, laptop resizing, optional browser fullscreen, and classroom display readability.

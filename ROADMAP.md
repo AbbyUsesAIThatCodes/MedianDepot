@@ -2,7 +2,7 @@
 
 Recorded September 27, 2026 from the teacher-and-Rowan brainstorm.
 
-**Current State:** Version 0.1.0 implements the Issue #1 foundation: a small procedural 3D yard, two reproducible five-crate shipments, intact-crate sorting, and odd-count median selection and submission. Local browser launch and a Pages workflow are included. The shared factory opening, pair assistance, even counts, teaching modes, and worksheets remain future work. Deployment status is separate from implementation status.
+**Current State:** Version 0.2.0 adds the full-window yard and collapsible overlay controls from Issue #11. Student laptops are the device target; phone-specific work is out of scope. The game implements the Issue #1 foundation: a small procedural 3D yard, two reproducible five-crate shipments, intact-crate sorting, and odd-count median selection and submission. Local browser launch and a Pages workflow are included. The shared factory opening, pair assistance, even counts, teaching modes, and worksheets remain future work. Deployment status is separate from implementation status.
 
 See the [Design Brief](docs/DESIGN.md) for teaching mechanics, examples, and the distinction between confirmed direction and proposed details.
 
