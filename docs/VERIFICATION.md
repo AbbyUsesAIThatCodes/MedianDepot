@@ -37,7 +37,11 @@ npx playwright install chromium
 npm run test:browser
 ```
 
-The test configuration accepts `PLAYWRIGHT_CHROMIUM_EXECUTABLE` for an existing Chromium binary. `CAPTURE_DIR` optionally saves screenshots and extends the per-test timeout for software rendering. Neither variable is required for normal local/CI tests. The authoring environment uses an npm-distributed Chromium binary because its normal Playwright browser download was unavailable; CI uses Playwright's normal browser installation.
+The test configuration accepts `PLAYWRIGHT_CHROMIUM_EXECUTABLE` for an existing Chromium binary. `CAPTURE_DIR` optionally saves review screenshots; it does not change the test timeout. Neither variable is required for normal local/CI tests. All runs use the same 60-second per-test budget and SwiftShader software WebGL launch flags. The authoring environment uses an npm-distributed Chromium binary because its normal Playwright browser download was unavailable; CI uses Playwright's normal browser installation.
+
+## PR #13 CI Follow-Up
+
+GitHub Actions run [36362974784](https://github.com/AbbyUsesAIThatCodes/MedianDepot/actions/runs/36362974784) passed the data tests and build, but three of the ten browser scenarios exhausted the original 30-second test budget. Local screenshot runs had a 60-second budget and explicit software WebGL flags; CI had neither. The configuration now applies that same budget and renderer setup to both environments, retaining every scenario and assertion. Failed browser runs retain traces, screenshots, and error contexts in the `browser-test-failures` workflow artifact for seven days. The list reporter records individual scenario durations in the job log.
 
 ## Practical Limits
 
