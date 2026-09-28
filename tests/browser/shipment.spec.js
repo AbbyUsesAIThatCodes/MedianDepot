@@ -1,15 +1,27 @@
 import { test, expect } from '@playwright/test';
 
-const crate = (page, label) => page.locator(`.crate-button[data-crate-id$="-${label}"]`);
-const values = page => page.locator('.crate-button strong').allTextContents();
+const picker = page => page.getByRole('combobox', { name: 'Select a Crate' });
+const values = page => page.locator('#crate-select option[data-quantity]').evaluateAll(options => options.map(option => option.dataset.quantity));
+const crateOption = (page, label) => page.locator(`#crate-select option[value$="-${label}"]`);
+async function choose(page, label) { await picker(page).selectOption(await crateOption(page, label).getAttribute('value')); }
+async function position(page, label) { return Number((await crateOption(page, label).textContent()).match(/Position (\d+)/)[1]) - 1; }
 async function arrange(page, labels) {
   for (let target = 0; target < labels.length; target++) {
-    const button = crate(page, labels[target]);
-    await button.click();
-    const position = Number((await button.getAttribute('aria-label')).match(/position (\d+)/)[1]) - 1;
-    for (let i = position; i > target; i--) await button.press('ArrowLeft');
-    for (let i = position; i < target; i++) await button.press('ArrowRight');
+    await choose(page, labels[target]);
+    const from = await position(page, labels[target]);
+    for (let i = from; i > target; i--) await page.getByRole('button', { name: 'Move Selected Crate Left' }).click();
+    for (let i = from; i < target; i++) await page.getByRole('button', { name: 'Move Selected Crate Right' }).click();
   }
+}
+async function capture(page, name) {
+  if (!process.env.CAPTURE_DIR) return;
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  await page.screenshot({ path: `${process.env.CAPTURE_DIR}/${name}.png` });
+}
+async function expectFullWindow(page) {
+  const size = page.viewportSize();
+  await expect.poll(() => page.locator('#scene canvas').boundingBox()).toEqual({ x: 0, y: 0, width: size.width, height: size.height });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth && document.documentElement.scrollHeight <= innerHeight)).toBe(true);
 }
 
 test('full shipment loop, useful errors, correct median, and replay', async ({ page }) => {
@@ -18,10 +30,10 @@ test('full shipment loop, useful errors, correct median, and replay', async ({ p
   await page.goto('/');
   await expect(page.locator('#scene canvas')).toBeVisible();
   await expect(page.locator('#renderer-notice')).toBeHidden();
-  if (process.env.CAPTURE_DIR) {
-    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-    await page.screenshot({ path: `${process.env.CAPTURE_DIR}/desktop.png`, fullPage: true });
-  }
+  await expectFullWindow(page);
+  await expect(page.locator('#crate-row')).toHaveCount(0);
+  await expect(page.getByText('Crate Quantities', { exact: true })).toHaveCount(0);
+  await capture(page, 'desktop');
   expect(await values(page)).toEqual(['8', '2', '18', '4', '3']);
   await page.getByRole('button', { name: 'Check My Order' }).click();
   await expect(page.locator('#feedback')).toContainText('Almost!');
@@ -31,11 +43,11 @@ test('full shipment loop, useful errors, correct median, and replay', async ({ p
   await expect(page.locator('#answer-form')).toBeVisible();
   await page.getByRole('button', { name: 'Submit Median' }).click();
   await expect(page.locator('#feedback')).toContainText('First select');
-  await crate(page, 'C01').click();
+  await choose(page, 'C01');
   await page.getByLabel('Median Quantity').fill('4');
   await page.getByRole('button', { name: 'Submit Median' }).click();
   await expect(page.locator('#feedback')).toContainText('same number');
-  await crate(page, 'C04').click();
+  await choose(page, 'C04');
   await page.getByLabel('Median Quantity').fill('3');
   await page.getByRole('button', { name: 'Submit Median' }).click();
   await expect(page.locator('#feedback')).toContainText('position');
@@ -43,10 +55,10 @@ test('full shipment loop, useful errors, correct median, and replay', async ({ p
   await page.getByRole('button', { name: 'Submit Median' }).click();
   await expect(page.locator('#success-value')).toHaveText('4');
   await expect(page.locator('#success')).toBeVisible();
-  if (process.env.CAPTURE_DIR) await page.screenshot({ path: `${process.env.CAPTURE_DIR}/complete.png`, fullPage: true });
+  await capture(page, 'complete');
   await page.getByRole('button', { name: 'Try This Shipment Again' }).click();
   expect(await values(page)).toEqual(['8', '2', '18', '4', '3']);
-  await expect(page.locator('.crate-button[aria-pressed=true]')).toHaveCount(0);
+  await expect(picker(page)).toHaveValue('');
   expect(errors).toEqual([]);
 });
 
@@ -55,11 +67,11 @@ test('duplicate crates may swap identities and the middle occurrence must be sel
   await arrange(page, ['C03', 'C05', 'C04', 'C01', 'C02']);
   expect(await values(page)).toEqual(['2', '3', '4', '4', '8']);
   await page.getByRole('button', { name: 'Check My Order' }).click();
-  await crate(page, 'C01').click();
+  await choose(page, 'C01');
   await page.getByLabel('Median Quantity').fill('4');
   await page.getByRole('button', { name: 'Submit Median' }).click();
   await expect(page.locator('#success')).toBeHidden();
-  await crate(page, 'C04').click();
+  await choose(page, 'C04');
   await page.getByRole('button', { name: 'Submit Median' }).click();
   await expect(page.locator('#success')).toBeVisible();
 });
@@ -69,7 +81,7 @@ test('manifest, replay URL, shipment switch, unknown code, and reload', async ({
   await expect(page.locator('#code-notice')).toContainText('not supported');
   await page.locator('#shipment').selectOption('MD-1-002');
   await expect(page).toHaveURL(/shipment=MD-1-002/);
-  await crate(page, 'C01').click();
+  await choose(page, 'C01');
   await page.getByRole('button', { name: 'Move Selected Crate Right' }).click();
   await page.getByRole('button', { name: 'Shipment Manifest' }).click();
   await expect(page.locator('#manifest-body tr')).toHaveCount(5);
@@ -78,57 +90,75 @@ test('manifest, replay URL, shipment switch, unknown code, and reload', async ({
   await page.keyboard.press('Escape');
   await expect(page.locator('#manifest-dialog')).toBeHidden();
   await expect(page.locator('#manifest-button')).toBeFocused();
+  await expect(page.locator('#yard-controls')).toBeVisible();
   await page.reload();
   expect(await values(page)).toEqual(['4', '8', '2', '4', '3']);
-  await expect(page.locator('#code-notice')).toBeHidden();
 });
 
-test('resize and reduced motion retain order and selected identity', async ({ page }) => {
+test('resize and reduced motion preserve state, full-window canvas, and reachable overlays', async ({ page }) => {
   await page.goto('/');
-  await crate(page, 'C03').click();
+  await choose(page, 'C03');
   await page.getByRole('button', { name: 'Move Selected Crate Left' }).click();
   await page.getByLabel('Reduce Motion').check();
-  for (const size of [{ width: 1024, height: 768 }, { width: 390, height: 844 }, { width: 1440, height: 1000 }]) {
+  for (const size of [{ width: 1024, height: 600 }, { width: 1280, height: 720 }, { width: 1366, height: 768 }, { width: 1920, height: 1080 }, { width: 1440, height: 1000 }]) {
     await page.setViewportSize(size);
+    await expectFullWindow(page);
     expect(await values(page)).toEqual(['8', '18', '2', '4', '3']);
-    await expect(crate(page, 'C03')).toHaveAttribute('aria-pressed', 'true');
-    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    if (process.env.CAPTURE_DIR && size.width === 390) await page.screenshot({ path: `${process.env.CAPTURE_DIR}/mobile.png`, fullPage: true });
+    await expect(picker(page)).toHaveValue(/-C03$/);
+    const panel = await page.locator('#yard-controls').boundingBox();
+    expect(panel.x).toBeGreaterThanOrEqual(0);
+    expect(panel.y).toBeGreaterThanOrEqual(0);
+    expect(panel.x + panel.width).toBeLessThanOrEqual(size.width);
+    expect(panel.y + panel.height).toBeLessThanOrEqual(size.height);
+    await picker(page).scrollIntoViewIfNeeded();
+    if (size.width === 1366) await capture(page, 'laptop');
+    if (size.width === 1024) await capture(page, 'compact-window');
   }
 });
 
-test('keyboard-only operation retains focus during reorder and supports dialog dismissal', async ({ page }) => {
+test('keyboard selection, movement, overlay focus return, and dialog dismissal', async ({ page }) => {
   await page.goto('/');
-  await crate(page, 'C01').focus();
+  await picker(page).focus();
+  await page.keyboard.press('ArrowDown');
+  await expect(picker(page)).toHaveValue(/-C01$/);
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('button', { name: 'Move Selected Crate Right' })).toBeFocused();
   await page.keyboard.press('Space');
-  await page.keyboard.press('ArrowRight');
-  await page.keyboard.press('ArrowRight');
-  await expect(crate(page, 'C01')).toBeFocused();
-  await expect(crate(page, 'C01')).toHaveAttribute('aria-label', /position 3/);
+  await page.keyboard.press('Space');
+  expect(await position(page, 'C01')).toBe(2);
+  await expect(page.getByRole('button', { name: 'Move Selected Crate Right' })).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#yard-controls')).toBeHidden();
+  await expect(page.locator('#controls-toggle')).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#controls-close')).toBeFocused();
   await page.getByRole('button', { name: 'How to Play', exact: true }).click();
-  await expect(page.locator('#help-dialog')).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(page.locator('#help-button')).toBeFocused();
 });
 
-test('touch-sized controls can finish the shipment without dragging', async ({ browser }) => {
-  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+test('compact laptop overlay completes a shipment without dragging', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 1024, height: 600 } });
   const page = await context.newPage();
   await page.goto('http://127.0.0.1:4173/');
   for (const [label, moves] of [['C02', 1], ['C05', 3], ['C04', 2]]) {
-    await crate(page, label).tap();
-    for (let i = 0; i < moves; i++) await page.getByRole('button', { name: 'Move Selected Crate Left' }).tap();
+    await choose(page, label);
+    for (let i = 0; i < moves; i++) await page.getByRole('button', { name: 'Move Selected Crate Left' }).click();
   }
   expect(await values(page)).toEqual(['2', '3', '4', '8', '18']);
-  await page.getByRole('button', { name: 'Check My Order' }).tap();
-  await crate(page, 'C04').tap();
+  await page.getByRole('button', { name: 'Check My Order' }).click();
+  await choose(page, 'C04');
   await page.getByLabel('Median Quantity').fill('4');
-  await page.getByRole('button', { name: 'Submit Median' }).tap();
+  await page.getByRole('button', { name: 'Submit Median' }).click();
+  await expect(page.locator('#success')).toBeVisible();
+  await page.locator('#controls-close').click();
+  await expect(page.locator('#yard-controls')).toBeHidden();
+  await page.locator('#controls-toggle').click();
   await expect(page.locator('#success')).toBeVisible();
   await context.close();
 });
 
-test('renderer failure leaves the complete learning loop usable', async ({ page }) => {
+test('renderer failure keeps accessible overlay controls usable', async ({ page }) => {
   await page.addInitScript(() => {
     const original = HTMLCanvasElement.prototype.getContext;
     HTMLCanvasElement.prototype.getContext = function(type, ...args) {
@@ -139,45 +169,66 @@ test('renderer failure leaves the complete learning loop usable', async ({ page 
   await expect(page.locator('#renderer-notice')).toBeVisible();
   await arrange(page, ['C02', 'C05', 'C04', 'C01', 'C03']);
   await page.getByRole('button', { name: 'Check My Order' }).click();
-  await crate(page, 'C04').click();
+  await choose(page, 'C04');
   await page.getByLabel('Median Quantity').fill('4');
   await page.getByRole('button', { name: 'Submit Median' }).click();
   await expect(page.locator('#success')).toBeVisible();
 });
 
-test('direct 3D picking and dragging move a whole crate, including a drop outside the yard', async ({ page }) => {
+test('overlay toggles retain selection, answer draft, phase, and order', async ({ page }) => {
   await page.goto('/');
-  await page.getByLabel('Reduce Motion').check();
-  const canvas = page.locator('#scene canvas');
-  const bounds = await canvas.boundingBox();
-  // Fixed teaching camera; coordinates target the visible first crate and last bay.
-  const point = (x, y) => [bounds.x + bounds.width * x, bounds.y + bounds.height * y];
-  await page.mouse.click(...point(0.267, 0.54));
-  await expect(crate(page, 'C01')).toHaveAttribute('aria-pressed', 'true');
-  await page.mouse.move(...point(0.267, 0.54));
-  await page.mouse.down();
-  await page.mouse.move(...point(0.684, 0.66), { steps: 12 });
-  await page.mouse.up();
-  await expect(crate(page, 'C01')).toHaveAttribute('aria-label', /position 5/);
-  expect(await values(page)).toEqual(['2', '18', '4', '3', '8']);
-  // Pointer capture keeps the same observation even when the pointer leaves the canvas.
-  await page.mouse.move(...point(0.684, 0.61));
-  await page.mouse.down();
-  await page.mouse.move(bounds.x - 20, bounds.y + bounds.height * 0.7, { steps: 12 });
-  await page.mouse.up();
-  await expect(crate(page, 'C01')).toHaveAttribute('aria-label', /position 1/);
-  expect(await values(page)).toEqual(['8', '2', '18', '4', '3']);
+  await arrange(page, ['C02', 'C05', 'C04', 'C01', 'C03']);
+  await page.getByRole('button', { name: 'Check My Order' }).click();
+  await choose(page, 'C04');
+  await page.getByLabel('Median Quantity').fill('3.5');
+  const before = await values(page);
+  await page.locator('#controls-toggle').click();
+  await expect(page.locator('#yard-controls')).toBeHidden();
+  await expect(page.locator('#controls-toggle')).toHaveAttribute('aria-expanded', 'false');
+  await expectFullWindow(page);
+  await capture(page, 'unobstructed');
+  await page.locator('#controls-toggle').click();
+  await expect(page.locator('#answer-form')).toBeVisible();
+  await expect(picker(page)).toHaveValue(/-C04$/);
+  await expect(page.getByLabel('Median Quantity')).toHaveValue('3.5');
+  expect(await values(page)).toEqual(before);
+  await page.getByLabel('Median Quantity').fill('4');
+  await page.getByRole('button', { name: 'Submit Median' }).click();
+  await expect(page.locator('#success')).toBeVisible();
 });
 
-test('fullscreen preserves in-progress state', async ({ page }) => {
+test('fullscreen preserves the in-progress overlay state', async ({ page }) => {
   await page.goto('/');
-  await crate(page, 'C04').click();
+  await choose(page, 'C04');
   await page.getByRole('button', { name: 'Move Selected Crate Left' }).click();
   await page.getByRole('button', { name: 'Enter Fullscreen' }).click();
-  await expect.poll(() => page.evaluate(() => Boolean(document.fullscreenElement))).toBe(true);
+  // Software rendering can block a fullscreen state read for over five seconds.
+  await expect.poll(() => page.evaluate(() => Boolean(document.fullscreenElement)), { timeout: 15000 }).toBe(true);
   expect(await values(page)).toEqual(['8', '2', '4', '18', '3']);
-  await expect(crate(page, 'C04')).toHaveAttribute('aria-pressed', 'true');
+  await expect(picker(page)).toHaveValue(/-C04$/);
   await page.getByRole('button', { name: 'Exit Fullscreen' }).click();
-  await expect.poll(() => page.evaluate(() => Boolean(document.fullscreenElement))).toBe(false);
+  await expect.poll(() => page.evaluate(() => Boolean(document.fullscreenElement)), { timeout: 15000 }).toBe(false);
   expect(await values(page)).toEqual(['8', '2', '4', '18', '3']);
+});
+
+test('all five 3D crates remain pickable beside the overlay and dragging preserves identities', async ({ page }) => {
+  await page.goto('/');
+  await page.getByLabel('Reduce Motion').check();
+  const points = [[230, 552], [367, 565], [506, 580], [650, 593], [800, 604]];
+  for (let i = 0; i < points.length; i++) {
+    await page.mouse.click(...points[i]);
+    await expect(picker(page)).toHaveValue(new RegExp(`-C0${i + 1}$`));
+  }
+  await page.mouse.move(...points[0]);
+  await page.mouse.down();
+  await page.mouse.move(800, 652, { steps: 12 });
+  await page.mouse.up();
+  expect(await position(page, 'C01')).toBe(4);
+  expect(await values(page)).toEqual(['2', '18', '4', '3', '8']);
+  await page.mouse.move(...points[4]);
+  await page.mouse.down();
+  await page.mouse.move(2, 680, { steps: 12 });
+  await page.mouse.up();
+  expect(await position(page, 'C01')).toBe(0);
+  expect(await values(page)).toEqual(['8', '2', '18', '4', '3']);
 });

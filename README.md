@@ -4,7 +4,7 @@ A 3D classroom game about **median**, set in a warm, cartoony rail yard. Sort in
 
 The larger shared factory world with **Mean Machine**, pair highlights, and even-count instruction are planned follow-ups.
 
-**Version 0.1.0:** First playable sorting-and-odd-median foundation for Issue #1. Two fixed five-crate shipments, including repeated quantities. No account, timer, backend, or runtime CDN required.
+**Version 0.2.0:** The 3D yard fills the browser window, with collapsible overlay controls and no permanent bottom quantities strip (Issue #11). Built on the sorting-and-odd-median foundation from Issue #1. Two fixed five-crate shipments, including repeated quantities. No account, timer, backend, or runtime CDN required.
 
 ![The Median Depot 3D rail yard and sorting controls](docs/images/median-depot.png)
 
@@ -17,7 +17,7 @@ npm ci
 npm run dev
 ```
 
-Open the local URL printed by Vite, normally `http://127.0.0.1:5173`. Keep that terminal running. Students only need a modern browser with WebGL2; Node is needed on the development/hosting machine. If 3D is unavailable, the accessible HTML controls remain playable.
+Open the local URL printed by Vite, normally `http://127.0.0.1:5173`. Keep that terminal running. Students use a laptop with a modern WebGL2-capable browser; Node is needed on the development/hosting machine. If 3D is unavailable, the accessible HTML controls remain playable.
 
 For a production build:
 
@@ -30,12 +30,12 @@ Open the preview URL, normally `http://127.0.0.1:4173`. Serve the generated `dis
 
 ## Play a Shipment
 
-1. Drag whole crates in the 3D yard, or select a crate in the row and use **Move Left** / **Move Right**. Keyboard: Tab to a crate, Enter/Space to select, and Left/Right Arrow to move that focused crate.
+1. Drag whole crates in the 3D yard, or open **Yard Controls**, choose **Select a Crate**, and use **Move Left** / **Move Right**. Keyboard: Tab to the selector, use arrow keys to choose a crate (Enter to confirm if the native menu requires it), then Tab to a Move button and press Enter or Space.
 2. Arrange quantities from least to greatest, then choose **Check My Order**. Equal quantities may be in either order.
 3. Select the middle crate. Enter its quantity under **Median Quantity**, then **Submit Median**. The correct value alone does not count if a different crate is selected.
 4. **Replay Shipment** restores the exact initial arrival order. **Edit the Order** returns to sorting without changing values.
 
-Crate IDs travel with the crates. **Quantity** is the number inside; **Position** is the crate's current place in the row. Original quantities and IDs are always available in **Shipment Manifest**. That dialog also contains a selectable replay link. Fullscreen and **Reduce Motion** preserve the current arrangement.
+Crate IDs travel with the crates. **Quantity** is the number inside; **Position** is the crate's current place in the row. Original quantities and IDs are always available in **Shipment Manifest**. That dialog also contains a selectable replay link. **Yard Controls** hides/reopens the overlay without changing order, selection, phase, or a typed answer. Escape hides the overlay when a dialog or native selector is not using that key. **Fullscreen** optionally hides browser chrome; the yard already fills the browser viewport by default. **Reduce Motion** is inside the overlay. All of these controls preserve the current arrangement.
 
 | Shipment Code | Arrival Quantities | Sorted Quantities | Median |
 | --- | --- | --- | --- |
@@ -43,6 +43,12 @@ Crate IDs travel with the crates. **Quantity** is the number inside; **Position*
 | `MD-1-002` | 4, 8, 2, 4, 3 | 2, 3, 4, 4, 8 | 4 |
 
 Append `?shipment=MD-1-002` to the launch URL to reproduce that shipment. Codes identify immutable versioned datasets **and arrival order**, not a saved in-progress game. Reload starts fresh. Unknown codes show a notice and use the default. See [Runtime and Launch Decision](docs/RUNTIME.md) for the full contract.
+
+## Classroom Device Target
+
+The teacher's standing target for all educational games is **student laptops**. Prioritize laptop windows, mouse/trackpad input, keyboard access, and readable classroom projection. Phone-specific layouts, screenshots, and testing are outside this project's scope.
+
+On shorter laptop windows the overlay scrolls internally; the page and yard remain fixed to the viewport. The camera frames all five crates in the area clear of the open overlay. Collapse **Yard Controls** for an unobstructed yard.
 
 ## GitHub Pages
 
