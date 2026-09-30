@@ -1,4 +1,20 @@
-# Full-Window Yard Verification
+# Local Development Verification
+
+## September 30: Shared World and Camera — Issue #2
+
+Environment: Windows, Node 22.12.0 / npm 10.9.0, Playwright 1.63.0, headless Microsoft Edge 154.0.4258.37 with software WebGL. Laptop viewports: 1024×600, 1280×720, 1366×768, 1440×1000, and 1920×1080. This is local development, not a deployment or classroom hardware acceptance.
+
+- `npm test`: **11 passing**. Original permutation/identity tests retained; shared route endpoints, both exterior transforms, flat fractional-ring contacts, distinct relief profiles, and concurrent build ordinal reservations checked.
+- `npm run test:browser`: **14 passing**. Full animated arrival; identical exterior pose; intro gameplay lock; repeated Skip Intro; reduced-motion equality; resize during intro; preference change during intro; simulated hidden-tab/context-loss interruptions; keyboard focus return; actual raycast selection and drag reordering; both existing shipments; errors/retry; replay; manifest; dialogs; fullscreen; responsive overlays; WebGL fallback.
+- `npm run build`: succeeds. Generated console, output folder, embedded manifest, UI footer, and current report use one identity. Build 2 and Build 3 have distinct ordinals/timestamps. Build 1 was a sandbox child-process failure and its reservation remains consumed.
+- `scripts/verify-offline.mjs`: **passed** against Build 3. Opened `Play Median Depot.html` directly from disk, completed the original shipment, checked exact identity equality, observed no page errors and zero HTTP requests. This reuses the artifact without allocating a new identity.
+- Visually inspected exterior, arrival, selected cargo, 1366×768 and 1024×600 captures. Tightened teaching framing, moved the depot sign clear of its roof, and added ring contours after first inspection. Cargo values remain readable outside the overlay. A large value shows a covered load rather than a misleading smaller visible count.
+
+Evidence is under ignored `evidence/issue-2/`, with `evidence/offline-build.png` and `evidence/offline-check.json`. The generated [Current Local Build](CURRENT_BUILD.md) is authoritative for the latest immutable artifact. The frozen shared handoff records its own local source SHA and file hashes separately.
+
+Limitations: physical student laptops/trackpads, classroom projection, Firefox/Safari, and teacher acceptance of thin Studded fractional profiles are unverified. Hidden-tab/context-loss events are simulated browser events. MeanMachine's eventual integration is not tested by these MedianDepot results. The shared camera routes and ring geometry are tested independently; no claim is made that MeanMachine gameplay exists in this repository. No issues, PRs, remote branches, or deployments were created.
+
+## Historical: Full-Window Yard Verification
 
 Verified September 27, 2026 for version 0.2.0 and Issue #11. The teacher's target is student laptops; phone-specific verification is out of scope.
 

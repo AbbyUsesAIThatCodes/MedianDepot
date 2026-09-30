@@ -1,0 +1,14 @@
+import { chromium } from '@playwright/test';
+import { mkdir } from 'node:fs/promises';
+const browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE || 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', headless: true, args: ['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader'] });
+const page = await browser.newPage({ viewport: { width: 1366, height: 768 } });
+page.on('pageerror', error => console.log('PAGE ERROR:', error.message));
+await mkdir('evidence', { recursive: true });
+await page.goto('http://127.0.0.1:4173/?qa=1');
+await page.locator('#scene canvas').waitFor();
+await page.screenshot({ path: 'evidence/exterior.png' });
+await page.locator('#skip-intro').click();
+await page.waitForFunction(() => document.querySelector('#scene').dataset.intro === 'complete');
+await page.screenshot({ path: 'evidence/yard.png' });
+console.log(JSON.stringify(await page.evaluate(() => window.medianDepotQA?.inspect())));
+await browser.close();
