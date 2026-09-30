@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
+import { createHash } from 'node:crypto';
 import { EXTERIOR_POSE, INTRO_DURATION_MS, sampleIntro } from '../src/shared/camera.js';
 import { createRingGeometry, RING_THICKNESS } from '../src/shared/cargo.js';
 import { PATTERNS } from '../src/shared/palette.js';
@@ -52,4 +53,13 @@ test('concurrent ordinal allocation cannot collide and failed attempts stay cons
   assert.equal(await reserveOrdinal(directory, 'local-test'), 9);
   const ledger = JSON.parse(await readFile(path.join(directory, 'local-test.json')));
   assert.equal(ledger.attempts.length, 9);
+});
+
+test('frozen shared-source bytes match the consumer manifest', async () => {
+  const base = new URL('../src/shared/', import.meta.url);
+  const manifest = JSON.parse(await readFile(new URL('manifest.json', base), 'utf8'));
+  for (const [file, expected] of Object.entries(manifest.files)) {
+    const actual = createHash('sha256').update(await readFile(new URL(file, base))).digest('hex');
+    assert.equal(actual, expected, `${file} diverged from the frozen shared asset source.`);
+  }
 });

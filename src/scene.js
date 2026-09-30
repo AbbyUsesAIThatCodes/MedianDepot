@@ -4,6 +4,7 @@ import { createPallet } from './shared/cargo.js';
 import { createMeshKit, createLabel, disposeTree } from './shared/primitives.js';
 import { createSharedWorld, WORLD } from './shared/world.js';
 import { EXTERIOR_POSE, INTRO_DURATION_MS, sampleIntro } from './shared/camera.js';
+import { pairMarkers } from './pairs.js';
 
 export function createDepot(container, { onSelect, onMove, onActivate, onUnavailable, onIntroEnd, reducedMotion, viewBounds }) {
   const scene = new THREE.Scene();
@@ -32,8 +33,8 @@ export function createDepot(container, { onSelect, onMove, onActivate, onUnavail
   scene.add(sun, sun.target);
   const world = createSharedWorld();
   scene.add(world.root);
-  const cargoRoot = new THREE.Group(), slotsRoot = new THREE.Group();
-  scene.add(cargoRoot, slotsRoot);
+  const cargoRoot = new THREE.Group(), slotsRoot = new THREE.Group(), pairsRoot = new THREE.Group();
+  scene.add(cargoRoot, slotsRoot, pairsRoot);
   let current = null, pallets = new Map();
   let frame = 0, lastTime = 0, drag = null;
   let introActive = true, introStart = null, unavailable = false;
@@ -102,14 +103,20 @@ export function createDepot(container, { onSelect, onMove, onActivate, onUnavail
   }
   function rebuildSlots(count) {
     disposeTree(slotsRoot); slotsRoot.clear();
+    disposeTree(pairsRoot); pairsRoot.clear();
     const { box } = createMeshKit();
+    const markers = pairMarkers(count);
     for (let index = 0; index < count; index++) {
       box(slotsRoot, [2.34, 0.035, 2.85], [xFor(index), 0.22, 5], '#b2c2b9');
       const number = createLabel(slotsRoot, `Position ${index + 1}`, 1.42, 0.27, [xFor(index), 0.27, 6.6], { background: PALETTE.ink, color: PALETTE.cream });
       number.rotation.x = -Math.PI / 4;
+      const marker = markers[index];
+      for (const xOffset of [-1.16, 1.16]) box(pairsRoot, [0.07, 0.12, 2.6], [xFor(index) + xOffset, 0.35, 5], marker.color);
+      for (const z of [3.7, 6.3]) box(pairsRoot, [2.38, 0.12, 0.07], [xFor(index), 0.35, z], marker.color);
+      createLabel(pairsRoot, marker.label, 1.95, 0.36, [xFor(index), 3.3, 5.2], { background: marker.color, color: marker.middle ? PALETTE.ink : '#ffffff' });
     }
   }
-  function update(crates, state) {
+  function update(crates, state, { showPairs = true } = {}) {
     const changed = current?.code !== state.code;
     current = state;
     if (changed) {
@@ -126,6 +133,7 @@ export function createDepot(container, { onSelect, onMove, onActivate, onUnavail
       if (reducedMotion()) { item.group.position.x = targetX; item.moveAt = null; }
     });
     container.dataset.phase = state.phase;
+    pairsRoot.visible = showPairs && state.phase !== 'sort';
     if (reducedMotion()) finishIntro('reduced-motion');
     requestDraw();
   }
@@ -208,10 +216,10 @@ export function createDepot(container, { onSelect, onMove, onActivate, onUnavail
   function inspect() {
     scene.updateMatrixWorld(true); camera.updateMatrixWorld(true);
     return {
-      introActive, camera: { position: camera.position.toArray(), target: introActive ? null : endpoint.target, fov: camera.fov },
+      introActive, pairsVisible: pairsRoot.visible, pairLabels: pairMarkers(current?.order.length ?? 5).map(marker => marker.label), camera: { position: camera.position.toArray(), target: introActive ? null : endpoint.target, fov: camera.fov },
       pallets: [...pallets].map(([id, item]) => {
         const point = item.group.localToWorld(new THREE.Vector3(0, 0.68, 1.06)).project(camera);
-        return { id, quantity: item.group.userData.quantity, appearance: item.group.userData.appearance, x: (point.x + 1) / 2 * size.width, y: (1 - point.y) / 2 * size.height };
+        return { id, quantity: item.group.userData.quantity, covered: item.group.userData.covered, visibleRings: item.group.getObjectByName('Load').children.filter(child => child.userData.fraction === 1).length, appearance: item.group.userData.appearance, x: (point.x + 1) / 2 * size.width, y: (1 - point.y) / 2 * size.height };
       }),
     };
   }

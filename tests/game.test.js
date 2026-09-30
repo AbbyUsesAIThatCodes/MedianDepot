@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { SHIPMENTS, resolveShipment, createGame, orderedCrates, isSorted, selectCrate, moveCrate, checkOrder, submitMedian, editOrder } from '../src/game.js';
+import { SHIPMENTS, resolveShipment, createGame, orderedCrates, isSorted, selectCrate, moveCrate, checkOrder, submitMedian, editOrder, middleInfo, activateMedian } from '../src/game.js';
+import { pairMarkers } from '../src/pairs.js';
 
 const quantities = state => orderedCrates(state).map(crate => crate.quantity);
 function sorted(state) {
@@ -42,11 +43,17 @@ test('duplicates count as separate observations in either equal-value order', ()
   assert.equal(submitMedian(selectCrate(state, secondEqual), 4).ok, true);
 });
 
-test('every permutation and every single destination preserve all crate identities and values', () => {
+test('small-shipment permutations and larger-row moves preserve all identities and values', () => {
   for (const shipment of SHIPMENTS) {
     const arrival = createGame(shipment.code);
     const original = [...shipment.crates].sort((a, b) => a.id.localeCompare(b.id));
-    for (const order of permutations(arrival.order)) {
+    // Exhaust the smaller catalogs; cover rotations/reversals and every move
+    // for larger rows without growing to 9! × 81 equivalent identity checks.
+    const arrangements = arrival.order.length <= 5 ? permutations(arrival.order) : arrival.order.flatMap((_, index) => {
+      const rotated = [...arrival.order.slice(index), ...arrival.order.slice(0, index)];
+      return [rotated, [...rotated].reverse()];
+    });
+    for (const order of arrangements) {
       const state = order.reduce((next, id, index) => moveCrate(next, id, index), arrival);
       for (const id of order) for (let to = -1; to <= order.length; to++) {
         const next = moveCrate(state, id, to);
@@ -57,6 +64,65 @@ test('every permutation and every single destination preserve all crate identiti
       assert.equal(isSorted(state), values.every((value, i) => i === 0 || values[i - 1] <= value));
       assert.deepEqual(createGame(shipment.code), arrival);
     }
+  }
+});
+
+test('new shipment codes span two through nine observations including zero and fractional medians', () => {
+  const expected = { 'MD-1-003': [4, 2.5], 'MD-1-004': [6, 4], 'MD-1-005': [7, 3], 'MD-1-006': [9, 4], 'MD-1-007': [2, 3.5], 'MD-1-008': [3, 3] };
+  for (const [code, [count, median]] of Object.entries(expected)) {
+    const state = checkOrder(sorted(createGame(code))).state;
+    assert.equal(state.order.length, count);
+    assert.equal(middleInfo(state).median, median);
+    assert.equal(new Set(state.order).size, count);
+    if (code !== 'MD-1-007') assert.ok(quantities(state).includes(0));
+  }
+});
+
+test('either even middle must lead to the same average of both values', () => {
+  for (const code of ['MD-1-003', 'MD-1-004', 'MD-1-007']) {
+    const state = checkOrder(sorted(createGame(code))).state;
+    const info = middleInfo(state);
+    assert.equal(submitMedian(selectCrate(state, info.ids[0]), info.median).ok, false);
+    for (const id of info.ids) {
+      const activated = activateMedian(state, id);
+      assert.equal(activated.ok, true);
+      assert.equal(activated.state.phase, 'median');
+      assert.equal(activated.state.middleActivated, true);
+      for (const answer of ['', ' ', 'NaN', 'Infinity', 'no', info.median + 1]) assert.equal(submitMedian(activated.state, answer).ok, false);
+      if (info.values[0] !== info.values[1]) for (const value of info.values) assert.equal(submitMedian(activated.state, value).ok, false);
+      const complete = submitMedian(activated.state, info.median);
+      assert.equal(complete.ok, true);
+      assert.equal(complete.state.phase, 'complete');
+      assert.deepEqual(complete.state.order, state.order);
+      assert.equal(editOrder(complete.state).middleActivated, false);
+      assert.equal(createGame(code).middleActivated, false);
+    }
+    for (const id of state.order.filter(id => !info.ids.includes(id))) assert.equal(activateMedian(state, id).ok, false);
+  }
+});
+
+test('odd activation requires the positional middle, including duplicate quantities', () => {
+  for (const shipment of SHIPMENTS.filter(s => s.crates.length % 2)) {
+    const state = checkOrder(sorted(createGame(shipment.code))).state;
+    const info = middleInfo(state);
+    assert.equal(activateMedian(createGame(shipment.code), info.ids[0]).ok, false);
+    for (const id of state.order) {
+      const result = activateMedian(state, id);
+      assert.equal(result.ok, id === info.ids[0]);
+      assert.equal(result.state.phase, result.ok ? 'complete' : 'median');
+      assert.deepEqual(result.state.order, state.order);
+    }
+  }
+});
+
+test('mirrored pair guides have matching noncolor labels, unique pair colors, and distinct middles', () => {
+  for (let count = 2; count <= 9; count++) {
+    const markers = pairMarkers(count);
+    assert.equal(markers.filter(m => m.middle).length, count % 2 ? 1 : 2);
+    const outer = markers.filter(m => !m.middle);
+    assert.equal(new Set(outer.map(m => m.color)).size, outer.length / 2);
+    for (let index = 0; index < Math.floor((count - 1) / 2); index++) assert.deepEqual(markers[index], markers[count - 1 - index]);
+    assert.ok(markers.every(m => /^(Pair \d|Middle(?: \d)?)$/.test(m.label)));
   }
 });
 
