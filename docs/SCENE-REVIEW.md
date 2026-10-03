@@ -35,3 +35,9 @@ The implementation now provides the direct interaction contract above. The curre
 The historical PR #14/#16 exterior-camera failures remain recorded on those PRs. The new intro test samples the unchanged exact exterior position/FOV before releasing queued animation frames, then independently checks the real animated arrival. This removes the race between a CPU-delayed assertion and the 988ms exterior hold without changing the camera baseline or treating old CI as passed.
 
 No merge or deployment is authorized. Physical touchscreens, trackpads and classroom projection remain owner-review checks.
+
+## Packaged Review Result
+
+The immutable local review is `0.2.0_Uncodenamed_local-scene-20261003_build-002_20261003T230803Z_g5bc26ce24081_web`, built from clean source `5bc26ce240810462395f1da28e19b783e73df1c5`. It passed all 25 browser scenarios against the versioned artifact, the 19-test unit suite, and offline full-shipment completion with zero HTTP requests and no page errors. All 27 build inputs match the declared Git commit byte for byte. [Review Evidence And Five-Minute Check](reviews/2026-10-03-scene/README.md) preserves the package, inventory, hashes and screenshots.
+
+Visual limit: at the highest camera angle in a 1024x600 window, nine-pallet quantity labels become small although each pallet remains pickable. Reset View returns to the clearer teaching view. Classroom-distance readability and physical touch/trackpad feel still require owner review. The three-pallet success sentence also retains the minor grammar issue "1 pallets on each side."

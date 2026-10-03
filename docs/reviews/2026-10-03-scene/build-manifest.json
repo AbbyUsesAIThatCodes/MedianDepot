@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "status": "development",
+  "codename": null,
+  "codenameSlug": "Uncodenamed",
+  "note": "Local development on the accepted 0.2.0 baseline. No next release number or codename has been agreed.",
+  "scope": "local-scene-20261003",
+  "ordinal": 2,
+  "builtAt": "2026-10-03T23:08:03.149Z",
+  "revision": "5bc26ce240810462395f1da28e19b783e73df1c5",
+  "prHead": null,
+  "dirty": false,
+  "sourceFingerprint": "8c873e54bc095df9a165042eadc07fbc76fe6a125eeb34b2f13deeef00903830",
+  "inputInventory": "build-inputs.json",
+  "inputCount": 27,
+  "inputInventorySha256": "0c08bb08c8c3083db800c445039e5e70df1384772b236115a0e02a9ec4ae736b",
+  "target": "web",
+  "identifier": "0.2.0_Uncodenamed_local-scene-20261003_build-002_20261003T230803Z_g5bc26ce24081_web"
+}

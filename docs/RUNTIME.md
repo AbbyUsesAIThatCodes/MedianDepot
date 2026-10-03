@@ -25,3 +25,11 @@ Existing Issue #2 replaces provisional crates with intact foam-ring pallets and 
 After checking order, an odd row completes by activating its positional middle. An even row accepts activation of either middle ID, then requires `(left + right) / 2`. An equal-value pair still contains two observations. Mirrored guides use separate colored frames and Pair/Middle text, preserving original cargo appearance. Selection alone does not submit or advance an even round. New shipments and replay remain at the fitted teaching camera, without replaying the intro.
 
 The canonical build script creates both a hosted `index.html` and an offline **Play Median Depot.html**. The offline file inlines the same compiled bundle/CSS; it was verified with no HTTP requests. No app, save, or catalog version bump is inferred from these local checkpoints.
+
+## Direct Scene Review (October 3)
+
+Draft PR #17 supersedes the September 30 activation behavior in this review branch: drag pallets directly and double-click/tap to toggle a yellow candidate arrow. The first attempt checks sorting automatically. Odd rows require the correct positional middle; even rows require both correct middle observations followed by the explicit average. Reordering clears the arrows and completion. Both candidate selection orders work, including equal middle quantities with distinct IDs. Hover light is independent of candidate selection.
+
+Instructions, feedback, average entry, shipment selection, replay and Reset View are visible over the scene. Optional Yard Controls supplies keyboard alternatives. Background dragging rotates a bounded camera; pallet gestures retain priority. Replay and shipment changes restore default framing, while Reset View preserves the mathematics state. Shared exterior/arrival camera geometry remains unchanged.
+
+The game provides no student-result download, worksheet export, persistent progress save or autosave. A replay link preserves only the shipment code and original arrival order. Downloading the review ZIP provides application files, not student work; extract it and open **Play Median Depot.html** for offline play. Reload starts a fresh round. This review adds no teaching mode and no student-data storage.

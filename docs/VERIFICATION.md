@@ -1,6 +1,21 @@
 # Local Development Verification
 
-## September 30: Variable Counts and Middle Activation — Issue #12
+## October 3: Packaged Direct Scene Review - Issue #12 / PR #17
+
+Verified immutable local build `0.2.0_Uncodenamed_local-scene-20261003_build-002_20261003T230803Z_g5bc26ce24081_web`, source `5bc26ce240810462395f1da28e19b783e73df1c5`, in Chromium 153.0.8010.12 on Windows with software WebGL.
+
+- **19 unit tests passed**, preserving shipment/permutation/frozen-world checks and adding reversible odd/even candidates and raw-input inventory checks.
+- **25 browser scenarios passed against the immutable artifact**, including direct scene drag/double-click, toggle undo, both even-middle selection orders, explicit fractional averaging, duplicates at the wrong position, zero, all eight shipments, retry/replay, input priority/thresholds, bounded camera/reset, compact-window fitting, keyboard, emulated touch, renderer fallback, and the unchanged exterior/arrival camera route.
+- **Offline completion passed** from the same artifact's standalone HTML: manifest/UI/report identity matched; no page errors and zero HTTP requests.
+- **Source parity passed:** all 27 input lengths/hashes match the declared Git commit and aggregate fingerprint `8c873e54bc095df9a165042eadc07fbc76fe6a125eeb34b2f13deeef00903830`. Builds 001 and 002 have distinct retained ordinals/timestamps and the same input fingerprint. These are explicit local-scope builds, not PR ordinals.
+- **CI passed** on the implementation commit: [run 37160650883](https://github.com/AbbyUsesAIThatCodes/MedianDepot/actions/runs/37160650883). CI tests a development server; the separate 25-scenario artifact run above checks the packaged build.
+- Inspected packaged screenshots of arrows/glow, explicit even calculation, three/nine-pallet framing, compact accessible controls and camera extremes. The even calculation controls remain within the dock at 1024x600 through 1920x1080. The highest compact nine-pallet camera angle makes labels small; Reset View restores the clearer teaching view. The three-pallet success sentence retains "1 pallets on each side."
+
+The historical PR #14/#16 camera failures remain failures in their records. This branch samples the exact unchanged initial camera pose while animation frames are paused, then releases real animation and checks arrival. It changes test timing, not the expected camera baseline. Original build 007 remains unchanged; its unresolved historical raw-input fingerprint is not represented as source parity.
+
+[Preserved Review Evidence](reviews/2026-10-03-scene/README.md) includes the package, manifest, input inventory, checksums, browser report and selected screenshots. Physical school touchscreens/trackpads, classroom projection, GPU performance, Firefox/Safari and dedicated screen-reader testing remain unverified. No merge, deployment, new teaching mode, worksheet or student-data save was performed.
+
+## September 30: Variable Counts and Middle Activation - Issue #12
 
 The separate local Issue #12 slice uses the frozen shared source from Issue #2 commit `871ca3d2e5d605524cd846db13de3e22a1ea9658`; `src/shared/` is byte-for-byte unchanged. Existing Issues #3/#4 supply the pair/averaging context; no duplicate issues or PRs were created.
 

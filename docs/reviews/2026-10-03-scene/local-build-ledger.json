@@ -1,0 +1,20 @@
+{
+  "scope": "local-scene-20261003",
+  "lastOrdinal": 2,
+  "attempts": [
+    {
+      "ordinal": 1,
+      "reservedAt": "2026-10-03T23:06:26.877Z",
+      "status": "succeeded",
+      "identifier": "0.2.0_Uncodenamed_local-scene-20261003_build-001_20261003T230626Z_g5bc26ce24081_web",
+      "completedAt": "2026-10-03T23:06:27.462Z"
+    },
+    {
+      "ordinal": 2,
+      "reservedAt": "2026-10-03T23:08:03.042Z",
+      "status": "succeeded",
+      "identifier": "0.2.0_Uncodenamed_local-scene-20261003_build-002_20261003T230803Z_g5bc26ce24081_web",
+      "completedAt": "2026-10-03T23:08:03.552Z"
+    }
+  ]
+}

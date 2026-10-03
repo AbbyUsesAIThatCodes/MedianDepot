@@ -1,0 +1,52 @@
+{
+  "identifier": "0.2.0_Uncodenamed_local-scene-20261003_build-002_20261003T230803Z_g5bc26ce24081_web",
+  "zipSha256": "bc56cb8f78b0a3f92c1ac173fb2d12d524040c128c409a50e81124795c1dca62",
+  "entries": [
+    {
+      "path": "BUILD-REPORT.md",
+      "bytes": 676,
+      "sha256": "9f0d17e131e02b3e4bda8cd9edf2df03ad67bdd7990f9c671ae3d3241f704722"
+    },
+    {
+      "path": "Play Median Depot.html",
+      "bytes": 629258,
+      "sha256": "c537a160b14d7a08d98b2f6e9eb5710ef1febc785cf53370b1b605cc25367389"
+    },
+    {
+      "path": "assets/index-CVY1BfEE.css",
+      "bytes": 13644,
+      "sha256": "c1c53d4849ac7a311fb0c1c65f424421def9fc6ed218393554f982e30e3644c3"
+    },
+    {
+      "path": "assets/index-CZtbt3WZ.js",
+      "bytes": 615083,
+      "sha256": "a66fbb5fb92b320931d0ec820473653df05b31456a533fa49bdf20eebd107afb"
+    },
+    {
+      "path": "build-inputs.json",
+      "bytes": 4340,
+      "sha256": "0c08bb08c8c3083db800c445039e5e70df1384772b236115a0e02a9ec4ae736b"
+    },
+    {
+      "path": "build-manifest.json",
+      "bytes": 774,
+      "sha256": "8b98a35646a42a49c5f351547a1b99e8aedafdcdcee1abd3c095355e02c8a577"
+    },
+    {
+      "path": "favicon.svg",
+      "bytes": 197,
+      "sha256": "8d8fcbdedc1e222b25da419c474f5998016742fb08d15fd271ea04efff903487"
+    },
+    {
+      "path": "index.html",
+      "bytes": 631,
+      "sha256": "2a01db8bd7c0dce1c1a971e832226cb8c44f92d1ee5ed21ff57d9a6064cdf697"
+    },
+    {
+      "path": "licenses/three-LICENSE.txt",
+      "bytes": 1081,
+      "sha256": "8b378ebe60e2fe500158cb0ac71cb5e8b7d92953c2abcc63a0eb90499653b5bc"
+    }
+  ],
+  "result": "all ZIP entries match immutable artifact bytes"
+}
