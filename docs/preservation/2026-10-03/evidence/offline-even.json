@@ -1,0 +1,14 @@
+{
+  "identifier": "0.2.0_Uncodenamed_local-20260930_build-007_20260930T140157Z_g60cd6252a521_web",
+  "launch": "offline file",
+  "shipment": "MD-1-003",
+  "checks": [
+    "both middle activations retain the same equation",
+    "one middle value rejected",
+    "correct exact median 2.5 accepted",
+    "zero HTTP requests",
+    "zero page errors",
+    "visible build identity matches"
+  ],
+  "result": "passed"
+}

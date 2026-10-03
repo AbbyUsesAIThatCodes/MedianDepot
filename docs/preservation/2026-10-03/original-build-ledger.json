@@ -1,0 +1,53 @@
+{
+  "scope": "local-20260930",
+  "lastOrdinal": 7,
+  "attempts": [
+    {
+      "ordinal": 1,
+      "reservedAt": "2026-09-30T13:30:21.048Z",
+      "status": "reserved"
+    },
+    {
+      "ordinal": 2,
+      "reservedAt": "2026-09-30T13:34:06.878Z",
+      "status": "succeeded",
+      "identifier": "0.2.0_Uncodenamed_local-20260930_build-002_20260930T133406Z_g08e90aed0a88-dirty_web",
+      "completedAt": "2026-09-30T13:34:07.846Z"
+    },
+    {
+      "ordinal": 3,
+      "reservedAt": "2026-09-30T13:41:22.968Z",
+      "status": "succeeded",
+      "identifier": "0.2.0_Uncodenamed_local-20260930_build-003_20260930T134123Z_g08e90aed0a88-dirty_web",
+      "completedAt": "2026-09-30T13:41:23.895Z"
+    },
+    {
+      "ordinal": 4,
+      "reservedAt": "2026-09-30T13:43:50.732Z",
+      "status": "succeeded",
+      "identifier": "0.2.0_Uncodenamed_local-20260930_build-004_20260930T134350Z_g871ca3d2e5d6_web",
+      "completedAt": "2026-09-30T13:43:51.587Z"
+    },
+    {
+      "ordinal": 5,
+      "reservedAt": "2026-09-30T13:56:00.812Z",
+      "status": "succeeded",
+      "identifier": "0.2.0_Uncodenamed_local-20260930_build-005_20260930T135600Z_g871ca3d2e5d6-dirty_web",
+      "completedAt": "2026-09-30T13:56:01.827Z"
+    },
+    {
+      "ordinal": 6,
+      "reservedAt": "2026-09-30T14:00:44.211Z",
+      "status": "succeeded",
+      "identifier": "0.2.0_Uncodenamed_local-20260930_build-006_20260930T140044Z_gcebdd17d78a0_web",
+      "completedAt": "2026-09-30T14:00:45.044Z"
+    },
+    {
+      "ordinal": 7,
+      "reservedAt": "2026-09-30T14:01:57.213Z",
+      "status": "succeeded",
+      "identifier": "0.2.0_Uncodenamed_local-20260930_build-007_20260930T140157Z_g60cd6252a521_web",
+      "completedAt": "2026-09-30T14:01:58.010Z"
+    }
+  ]
+}
