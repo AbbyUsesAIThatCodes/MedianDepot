@@ -64,10 +64,31 @@ document.querySelector('#app').innerHTML = `
 `;
 
 const $ = selector => document.querySelector(selector);
+// Core actions stay over the scene; the side panel is an optional input alternative.
+const instructions = document.createElement('section');
+instructions.id = 'scene-instructions';
+instructions.setAttribute('aria-label', 'Play Instructions');
+instructions.innerHTML = '<p>Click and drag to rearrange the pallets in order from smallest to biggest.</p><p>Double-click the middle pallet. If there are two middle pallets, select both.</p><small>Double-click again to remove an arrow. Drag the background to turn the view. Touch: drag and double-tap.</small>';
+$('main').append(instructions);
+const dock = document.createElement('section'); dock.id = 'scene-dock'; dock.setAttribute('aria-label', 'Shipment Actions');
+dock.innerHTML = '<div class="lesson-result"></div><div class="scene-toolbar"><div class="scene-shipment"></div><button id="reset-view">Reset View</button></div>';
+$('main').append(dock);
+for (const id of ['feedback', 'answer-form', 'success']) $('.lesson-result').append($('#' + id));
+$('.scene-shipment').append($('.shipment-picker'), $('#shipment'));
+$('.scene-toolbar').append($('#pair-controls'), $('#reset'), $('#next-shipment'));
+$('#pair-summary').classList.add('sr-only');
+const cameraControls = document.createElement('fieldset'); cameraControls.className = 'camera-controls';
+cameraControls.innerHTML = '<legend>Turn the View</legend><button id="camera-left" aria-label="Rotate View Left">Left</button><button id="camera-right" aria-label="Rotate View Right">Right</button><button id="camera-up" aria-label="Raise View">Up</button><button id="camera-down" aria-label="Lower View">Down</button>';
+$('.task-content').append(cameraControls);
+$('#use-middle').textContent = 'Toggle Median Arrow';
+$('#help-dialog .help-list').innerHTML = '<li><strong>Sort the quantities.</strong>Click and drag intact pallets from smallest to biggest. Equal quantities may be in either order.</li><li><strong>Select the middle.</strong>Double-click the middle pallet. For an even number, select both middle pallets. Double-click again to remove an arrow. Sorting is checked automatically when you try a median selection.</li><li><strong>Calculate an even median.</strong>Add the two middle quantities and divide by 2. Enter that answer in the visible calculation box.</li><li><strong>Use any input.</strong>Touch uses dragging and double-tapping. Yard Controls provides a selector, Move buttons, Toggle Median Arrow and camera buttons for keyboard or touch. Drag empty background to turn the view; Reset View restores its framing.</li>';
+$('#help-dialog').querySelectorAll('p')[1].textContent = 'Keyboard: open Yard Controls, select a pallet, then use Move Left / Move Right or Toggle Median Arrow. Tab reaches the always-visible calculation and shipment actions. Escape closes the panel. Reordering clears arrows and the previous answer.';
+$('.yard-status').hidden = true;
 $('#build-identity').textContent = BUILD.identifier;
 document.documentElement.classList.add('intro-playing');
 $('#yard-controls').inert = true;
 $('nav').inert = true;
+$('#scene-dock').inert = true;
 $('#shipment').value = state.code;
 $('#reduced-motion').checked = reduced;
 if (resolved.unknown) {
@@ -85,24 +106,23 @@ function setFeedback(message = '', kind = 'neutral') { feedback = message; feedb
 function select(id) {
   if (introPlaying) return;
   state = selectCrate(state, id);
-  setFeedback();
   render();
 }
 function activate(id) {
-  if (introPlaying || state.phase === 'complete') return;
+  if (introPlaying) return;
+  const previous = state;
   const result = activateMedian(state, id);
   state = result.state;
+  if (state !== previous) $('#median-answer').value = '';
   setFeedback(result.message, result.ok ? 'good' : 'retry');
   render();
-  if (result.ok) {
-    if (!controlsOpen) setControlsOpen(true, false);
-    (state.phase === 'complete' ? $('#next-shipment') : $('#median-answer')).focus({ preventScroll: false });
-  }
+  if (state.phase === 'median' && state.middleActivated) $('#median-answer').focus({ preventScroll: true });
 }
 function move(id, index) {
   if (introPlaying) return;
-  if (state.phase !== 'sort' || !state.order.includes(id) || state.order.indexOf(id) === index) return;
+  if (!state.order.includes(id) || state.order.indexOf(id) === index) return;
   state = moveCrate(state, id, index);
+  $('#median-answer').value = '';
   setFeedback();
   const crate = orderedCrates(state).find(item => item.id === id);
   $('#movement-status').textContent = `Pallet ${crate.label}, quantity ${crate.quantity}, moved to position ${state.order.indexOf(id) + 1}.`;
@@ -114,6 +134,7 @@ function replay() {
   $('#median-answer').value = '';
   setFeedback('Original arrival order restored. Ready for another try.');
   render();
+  depot?.resetView();
 }
 
 function render() {
@@ -132,16 +153,18 @@ function render() {
     return option;
   }));
   picker.value = state.selectedId ?? '';
-  picker.disabled = isComplete;
+  picker.disabled = false;
   $('#selected-value').textContent = selected ? `${selected.quantity} items` : 'No Pallet Selected';
   $('#selected-detail').textContent = selected ? `${selected.label} · Position ${state.order.indexOf(selected.id) + 1} of ${crates.length}` : 'Choose here or tap a pallet in the yard.';
   $('#move-left').disabled = !selected || state.order.indexOf(selected.id) === 0;
   $('#move-right').disabled = !selected || state.order.indexOf(selected.id) === crates.length - 1;
-  $('#move-controls').hidden = !isSort;
+  $('#move-controls').hidden = false;
   $('#answer-form').hidden = !(state.phase === 'median' && info.even && state.middleActivated);
-  $('#use-middle').hidden = state.phase !== 'median';
+  $('#use-middle').hidden = false;
   $('#use-middle').disabled = !selected;
-  $('#pair-controls').hidden = isSort;
+  $('#use-middle').setAttribute('aria-pressed', String(Boolean(selected && state.medianIds.includes(selected.id))));
+  $('#pair-controls').hidden = false;
+  $('#show-pairs').disabled = isSort;
   $('#pair-summary').hidden = !showPairs;
   $('#pair-summary').textContent = pairMarkers(crates.length).map((marker, index) => `${index + 1}: ${marker.label}`).join(' · ');
   $('#middle-equation').textContent = `(${info.values.join(' + ')}) ÷ 2 = ?`;
@@ -149,13 +172,14 @@ function render() {
   $('#next-shipment').hidden = !isComplete;
   $('#check-order').hidden = !isSort;
   $('#edit-order').hidden = isSort;
-  $('#selection').hidden = isComplete;
+  $('#selection').hidden = false;
   $('#success').hidden = !isComplete;
   $('#feedback').textContent = feedback;
   $('#feedback').className = `feedback ${feedbackKind}`;
-  $('#feedback').hidden = !feedback;
+  $('#feedback').hidden = isComplete;
+  if (!feedback && !isComplete) $('#feedback').textContent = isSort ? 'Start by dragging the pallets into order. Each quantity stays with its pallet.' : 'Choose the middle position' + (info.even ? 's. Both middle pallets are needed.' : '.');
   $('#task-title').textContent = isSort ? 'Put the Pallets in Order.' : isComplete ? 'Right in the Middle.' : info.even ? (state.middleActivated ? 'Average Both Middle Values.' : 'Find the Middle Pallets.') : 'Find the Middle Pallet.';
-  $('#task-description').textContent = isSort ? 'Arrange quantities from least to greatest. Each pallet stays whole.' : isComplete ? 'The ordered observations reveal the center.' : info.even ? 'There are two middle observations. Activate either one, then calculate using both quantities.' : 'Double-click the middle pallet, or select it and choose Use Selected Pallet.';
+  $('#task-description').textContent = 'Keyboard or touch alternative: select a pallet, move it, or toggle its median arrow. Dragging a checked row starts sorting again.';
   $('#shipment-badge').textContent = `${state.code} · ${crates.length} Pallets`;
   $('#yard-status').textContent = isSort ? 'Ready for Sorting' : isComplete ? 'Shipment Complete' : 'Order Checked';
   $('.scene-hint').textContent = isSort ? 'Drag pallets from least to greatest. Controls are in the overlay.' : isComplete ? 'Shipment complete. Replay to sort again.' : 'Double-click the middle, or use Yard Controls.';
@@ -175,10 +199,12 @@ function render() {
 
 $('#use-middle').addEventListener('click', () => activate(state.selectedId));
 $('#show-pairs').addEventListener('change', event => { showPairs = event.target.checked; render(); });
+$('#reset-view').addEventListener('click', () => depot?.resetView());
+for (const [id, yaw, elevation] of [['camera-left', -0.12, 0], ['camera-right', 0.12, 0], ['camera-up', 0, 0.08], ['camera-down', 0, -0.08]]) $('#' + id).addEventListener('click', () => depot?.rotateView(yaw, elevation));
 $('#next-shipment').addEventListener('click', () => {
   if (introPlaying || state.phase !== 'complete') return;
   const next = SHIPMENTS[(SHIPMENTS.findIndex(s => s.code === state.code) + 1) % SHIPMENTS.length];
-  state = createGame(next.code); $('#shipment').value = next.code; $('#code-notice').hidden = true; syncURL(); replay(); $('#crate-select').focus();
+  state = createGame(next.code); $('#shipment').value = next.code; $('#code-notice').hidden = true; syncURL(); replay(); $('#shipment').focus();
 });
 $('#crate-select').addEventListener('change', event => { if (event.target.value) select(event.target.value); });
 $('#move-left').addEventListener('click', () => move(state.selectedId, state.order.indexOf(state.selectedId) - 1));
@@ -234,9 +260,10 @@ $('#fullscreen-button').addEventListener('click', async () => {
 });
 document.addEventListener('fullscreenchange', () => { $('#fullscreen-button').setAttribute('aria-label', document.fullscreenElement ? 'Exit Fullscreen' : 'Enter Fullscreen'); });
 
-let controlsOpen = true;
+let controlsOpen = false;
 function setControlsOpen(open, focus = true) {
   controlsOpen = open;
+  document.documentElement.classList.toggle('controls-open', open);
   $('#yard-controls').hidden = !open;
   $('#controls-toggle').setAttribute('aria-expanded', String(open));
   $('#controls-toggle').setAttribute('aria-label', open ? 'Hide Yard Controls' : 'Show Yard Controls');
@@ -257,9 +284,9 @@ function viewBounds() {
   const { width, height } = $('#scene').getBoundingClientRect();
   const header = $('.app-header').getBoundingClientRect();
   const margin = width <= 1000 || height <= 620 ? 12 : 24;
-  const top = header.bottom + margin;
+  const top = Math.max(header.bottom, $('#scene-instructions').getBoundingClientRect().bottom) + margin / 2;
   let right = width - margin;
-  let bottom = height - 100;
+  let bottom = $('#scene-dock').getBoundingClientRect().top - margin / 2;
   if (controlsOpen) {
     const panel = $('#yard-controls').getBoundingClientRect();
     right = panel.left - margin;
@@ -279,15 +306,18 @@ function endIntro(reason) {
   document.documentElement.classList.remove('intro-playing');
   $('#yard-controls').inert = false;
   $('nav').inert = false;
-  if (reason !== 'interrupted') $('#crate-select').focus({ preventScroll: true });
+  $('#scene-dock').inert = false;
+  if (reason !== 'interrupted') (controlsOpen ? $('#crate-select') : $('#controls-toggle')).focus({ preventScroll: true });
 }
 try { depot = createDepot($('#scene'), { onSelect: select, onMove: move, onActivate: activate, onUnavailable: rendererUnavailable, onIntroEnd: endIntro, reducedMotion: () => reduced, viewBounds }); }
 catch (error) { console.warn('3D view unavailable:', error.message); rendererUnavailable(); }
 const overlayObserver = new ResizeObserver(() => depot?.resize());
 overlayObserver.observe($('#yard-controls'));
 overlayObserver.observe($('.app-header'));
-setControlsOpen(true, false);
+overlayObserver.observe($('#scene-instructions'));
+overlayObserver.observe($('#scene-dock'));
+setControlsOpen($('#renderer-notice').hidden === false, false);
 render();
 if (new URL(location.href).searchParams.has('qa')) {
-  Object.defineProperty(window, 'medianDepotQA', { value: Object.freeze({ inspect: () => depot?.inspect(), build: BUILD }) });
+  Object.defineProperty(window, 'medianDepotQA', { value: Object.freeze({ inspect: () => ({ ...depot?.inspect(), state, controlsOpen }), build: BUILD }) });
 }

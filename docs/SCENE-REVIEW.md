@@ -28,4 +28,10 @@ Required before final review: pure odd/even candidate-state tests, real browser 
 
 New builds must contain a per-file raw-byte input inventory and a reproducible aggregate fingerprint. Use a new explicit local scope while a shared PR allocator is unavailable. Do not relabel original build 007 or change its manifest: its ZIP is checksum-verified and browser-tested, while the historical input fingerprint remains unresolved. Details remain in the additive QA note on PR #16.
 
-This initial checkpoint records scope only. Implementation and current verification are pending. No merge or deployment is authorized.
+## Development Checkpoint
+
+The implementation now provides the direct interaction contract above. The current local development run passed 25 browser scenarios, including real mouse dragging/double-clicks, Chromium touch dispatch, keyboard controls, camera extremes and laptop resizing. The unit suite passed 19 tests including the per-file inventory check. Final packaged-artifact verification is recorded separately when complete; a development-preview pass is not an artifact pass.
+
+The historical PR #14/#16 exterior-camera failures remain recorded on those PRs. The new intro test samples the unchanged exact exterior position/FOV before releasing queued animation frames, then independently checks the real animated arrival. This removes the race between a CPU-delayed assertion and the 988ms exterior hold without changing the camera baseline or treating old CI as passed.
+
+No merge or deployment is authorized. Physical touchscreens, trackpads and classroom projection remain owner-review checks.

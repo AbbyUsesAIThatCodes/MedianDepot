@@ -4,7 +4,7 @@ const browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_C
 const page = await browser.newPage({ viewport: { width: 1366, height: 768 } });
 page.on('pageerror', error => console.log('PAGE ERROR:', error.message));
 await mkdir('evidence', { recursive: true });
-await page.goto('http://127.0.0.1:4173/?qa=1');
+await page.goto(`${process.env.REVIEW_BASE_URL || 'http://127.0.0.1:4174'}/?qa=1`);
 await page.locator('#scene canvas').waitFor();
 await page.screenshot({ path: 'evidence/exterior.png' });
 await page.locator('#skip-intro').click();

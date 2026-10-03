@@ -1,5 +1,8 @@
 import { defineConfig } from '@playwright/test';
 
+const baseURL = process.env.REVIEW_BASE_URL || 'http://127.0.0.1:4174';
+const port = Number(new URL(baseURL).port) || 4174;
+
 export default defineConfig({
   testDir: './tests/browser',
   fullyParallel: false,
@@ -9,7 +12,7 @@ export default defineConfig({
   timeout: 60000,
   reporter: 'list',
   use: {
-    baseURL: 'http://127.0.0.1:4173',
+    baseURL,
     viewport: { width: 1440, height: 1000 },
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
@@ -19,5 +22,5 @@ export default defineConfig({
       args: ['--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'],
     },
   },
-  webServer: { command: 'npm run dev -- --port 4173', url: 'http://127.0.0.1:4173', reuseExistingServer: !process.env.CI },
+  webServer: { command: `npm run dev -- --port ${port} --strictPort`, url: baseURL, reuseExistingServer: !process.env.CI },
 });

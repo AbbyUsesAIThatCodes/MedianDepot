@@ -78,15 +78,18 @@ test('new shipment codes span two through nine observations including zero and f
   }
 });
 
-test('either even middle must lead to the same average of both values', () => {
+test('both even middles must be toggled before accepting the same average in either selection order', () => {
   for (const code of ['MD-1-003', 'MD-1-004', 'MD-1-007']) {
     const state = checkOrder(sorted(createGame(code))).state;
     const info = middleInfo(state);
     assert.equal(submitMedian(selectCrate(state, info.ids[0]), info.median).ok, false);
     for (const id of info.ids) {
-      const activated = activateMedian(state, id);
-      assert.equal(activated.ok, true);
-      assert.equal(activated.state.phase, 'median');
+      const first = activateMedian(state, id);
+      assert.equal(first.ok, true);
+      assert.equal(first.state.phase, 'median');
+      assert.equal(first.state.middleActivated, false);
+      assert.equal(submitMedian(first.state, info.median).ok, false);
+      const activated = activateMedian(first.state, info.ids.find(other => other !== id));
       assert.equal(activated.state.middleActivated, true);
       for (const answer of ['', ' ', 'NaN', 'Infinity', 'no', info.median + 1]) assert.equal(submitMedian(activated.state, answer).ok, false);
       if (info.values[0] !== info.values[1]) for (const value of info.values) assert.equal(submitMedian(activated.state, value).ok, false);
@@ -147,15 +150,55 @@ test('median selection and quantity are both required; invalid and position answ
   assert.equal(submitMedian(selected, ' 4.0 ').ok, true);
 });
 
-test('median phase locks order; editing and replay deliberately reopen it', () => {
+test('reordering checked or complete rows clears median candidates and deliberately reopens sorting', () => {
   const state = checkOrder(sorted(createGame())).state;
-  assert.equal(moveCrate(state, state.order[0], 4), state);
+  assert.equal(moveCrate(state, state.order[0], 4).phase, 'sort');
   const editing = editOrder(state);
   assert.equal(editing.phase, 'sort');
   assert.equal(editing.selectedId, null);
   assert.deepEqual(editing.order, state.order);
   const complete = submitMedian(selectCrate(state, state.order[2]), 4).state;
   assert.deepEqual(createGame(complete.code), createGame());
+});
+
+test('direct toggles auto-check sorting, preserve duplicate positions, and undo completion without changing values', () => {
+  let state = sorted(createGame('MD-1-002'));
+  const order = state.order;
+  state = activateMedian(state, order[3]).state;
+  assert.deepEqual(state.medianIds, [order[3]]);
+  assert.equal(state.phase, 'median');
+  state = activateMedian(state, order[2]).state;
+  assert.equal(state.phase, 'complete');
+  assert.deepEqual(state.medianIds, [order[2]]);
+  state = activateMedian(state, order[2]).state;
+  assert.equal(state.phase, 'median');
+  assert.deepEqual(state.medianIds, []);
+  assert.deepEqual(state.order, order);
+  assert.deepEqual(quantities(state), [2,3,4,4,8]);
+});
+
+test('even candidates cap at two, can be removed and retried, and remain independent of keyboard focus selection', () => {
+  let state = sorted(createGame('MD-1-003'));
+  const order = state.order;
+  state = activateMedian(state, order[0]).state;
+  state = activateMedian(state, order[1]).state;
+  assert.equal(state.middleActivated, false);
+  const rejected = activateMedian(state, order[2]);
+  assert.equal(rejected.state, state);
+  assert.equal(rejected.ok, false);
+  state = activateMedian(state, order[0]).state;
+  state = activateMedian(state, order[2]).state;
+  assert.equal(state.middleActivated, true);
+  state = selectCrate(state, order[3]);
+  assert.equal(submitMedian(state, '2.5').ok, true);
+  state = activateMedian(submitMedian(state, '2.5').state, order[1]).state;
+  assert.equal(state.phase, 'median');
+  assert.equal(state.middleActivated, false);
+  assert.equal(submitMedian(state, '2.5').ok, false);
+  state = moveCrate(state, order[0], 3);
+  assert.equal(state.phase, 'sort');
+  assert.deepEqual(state.medianIds, []);
+  assert.equal(activateMedian(state, order[1]).ok, false);
 });
 
 test('catalog and original observations are frozen; invalid mutations are rejected', () => {

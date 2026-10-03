@@ -33,6 +33,7 @@ export function createGame(code = SHIPMENTS[0].code) {
     selectedId: null,
     phase: 'sort',
     middleActivated: false,
+    medianIds: Object.freeze([]),
   });
 }
 
@@ -54,28 +55,29 @@ export function isSorted(state) {
 }
 
 export function selectCrate(state, id) {
-  if (!state.order.includes(id) || state.phase === 'complete') return state;
+  if (!state.order.includes(id)) return state;
   return Object.freeze({ ...state, selectedId: id });
 }
 
 export function moveCrate(state, id, targetIndex) {
   orderedCrates(state);
-  if (state.phase !== 'sort' || !state.order.includes(id) || !Number.isInteger(targetIndex)) return state;
+  if (!state.order.includes(id) || !Number.isInteger(targetIndex)) return state;
   const fromIndex = state.order.indexOf(id);
   const bounded = Math.max(0, Math.min(state.order.length - 1, targetIndex));
   const order = [...state.order];
   order.splice(fromIndex, 1);
   order.splice(bounded, 0, id);
-  return Object.freeze({ ...state, order: Object.freeze(order), selectedId: id });
+  if (fromIndex === bounded) return state;
+  return Object.freeze({ ...state, order: Object.freeze(order), selectedId: id, phase: 'sort', medianIds: Object.freeze([]), middleActivated: false });
 }
 
 export function checkOrder(state) {
   if (state.phase !== 'sort') return { state, ok: false, message: 'This shipment is already checked.' };
   if (!isSorted(state)) return { state, ok: false, message: 'Almost! Read the quantities from left to right. Each one must be at least as large as the one before it.' };
   return {
-    state: Object.freeze({ ...state, phase: 'median', selectedId: null, middleActivated: false }),
+    state: Object.freeze({ ...state, phase: 'median', selectedId: null, middleActivated: false, medianIds: Object.freeze([]) }),
     ok: true,
-    message: state.order.length % 2 ? 'Order checked! Double-click the middle pallet, or select it and choose Use Selected Pallet.' : 'Order checked! Double-click either middle pallet, or use the selector. Then average both middle quantities.',
+    message: state.order.length % 2 ? 'Order checked! Double-click the middle pallet.' : 'Order checked! Select both middle pallets, then add their quantities and divide by 2.',
   };
 }
 
@@ -89,19 +91,26 @@ export function middleInfo(state) {
 }
 
 export function activateMedian(state, id) {
-  if (state.phase !== 'median') return { state, ok: false, message: 'Check the order before finding the median.' };
+  if (!state.order.includes(id)) return { state, ok: false, message: 'Choose a pallet in this shipment.' };
+  if (!isSorted(state)) return { state, ok: false, message: 'Sort the pallets from smallest to biggest first. Then double-click the middle pallet or pallets.' };
   const info = middleInfo(state);
-  if (!info.ids.includes(id)) return { state, ok: false, message: info.even ? 'Choose either of the two middle positions. Repeated quantities still count as separate observations.' : 'The middle pallet has the same number of pallets on each side. Choose that position.' };
-  const next = Object.freeze({ ...state, selectedId: id, middleActivated: true, phase: info.even ? 'median' : 'complete' });
-  return { state: next, ok: true, message: info.even ? `Both middle quantities matter: ${info.values[0]} and ${info.values[1]}. Add them and divide by 2.` : `The median is ${info.median}. There are ${info.sideCount} pallets on each side.` };
+  const before = state.medianIds ?? [];
+  const removing = before.includes(id);
+  if (!removing && info.even && before.length === 2) return { state, ok: false, message: 'Two pallets are selected. Double-click one again to remove its arrow before choosing another.' };
+  const ids = removing ? before.filter(item => item !== id) : info.even ? [...before, id] : [id];
+  const valid = ids.length === info.ids.length && info.ids.every(item => ids.includes(item));
+  const next = Object.freeze({ ...state, selectedId: id, medianIds: Object.freeze(ids), middleActivated: valid, phase: valid && !info.even ? 'complete' : 'median' });
+  if (removing) return { state: next, ok: true, message: 'Arrow removed. Double-click a pallet to select it again.' };
+  if (!info.ids.includes(id) || (ids.length === 2 && !valid)) return { state: next, ok: false, message: info.even ? 'Choose the two middle positions. Repeated quantities still count as separate pallets. Double-click an arrowed pallet to unselect it.' : 'The middle pallet has the same number of pallets on each side. Choose that position.' };
+  return { state: next, ok: true, message: info.even ? valid ? `Both middle pallets selected. Add ${info.values[0]} and ${info.values[1]}, then divide by 2.` : 'One middle pallet selected. Double-click the other middle pallet too.' : `The median is ${info.median}. There are ${info.sideCount} pallets on each side.` };
 }
 
 export function submitMedian(state, answer) {
   if (state.phase !== 'median') return { state, ok: false, message: 'Check the order before finding the median.' };
   const info = middleInfo(state);
-  if (!state.selectedId) return { state, ok: false, message: 'First select the pallet in the middle of the sorted row.' };
-  if (!info.ids.includes(state.selectedId)) return { state, ok: false, message: info.even ? 'Select either of the two middle pallets, then use both quantities.' : 'Look again: the middle pallet has the same number of pallets on each side.' };
-  if (info.even && !state.middleActivated) return { state, ok: false, message: 'Activate either middle pallet before calculating with both quantities.' };
+  if (info.even && (!state.middleActivated || state.medianIds?.length !== 2 || !info.ids.every(id => state.medianIds.includes(id)))) return { state, ok: false, message: 'Select both middle pallets before calculating their average.' };
+  if (!info.even && !state.selectedId) return { state, ok: false, message: 'First select the pallet in the middle of the sorted row.' };
+  if (!info.even && !info.ids.includes(state.selectedId)) return { state, ok: false, message: 'Look again: the middle pallet has the same number of pallets on each side.' };
   const raw = String(answer).trim();
   if (!raw || !Number.isFinite(Number(raw))) return { state, ok: false, message: 'Enter a number for the median quantity.' };
   if (Number(raw) !== info.median) return { state, ok: false, message: info.even ? `Use both middle quantities: (${info.values[0]} + ${info.values[1]}) ÷ 2. One middle value alone may not be the median.` : 'Use the quantity printed on the middle pallet. Its position in the row is a different number.' };
@@ -113,5 +122,5 @@ export function submitMedian(state, answer) {
 }
 
 export function editOrder(state) {
-  return Object.freeze({ ...state, phase: 'sort', selectedId: null, middleActivated: false });
+  return Object.freeze({ ...state, phase: 'sort', selectedId: null, middleActivated: false, medianIds: Object.freeze([]) });
 }

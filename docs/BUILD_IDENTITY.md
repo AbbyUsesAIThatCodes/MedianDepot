@@ -13,6 +13,8 @@
 | Reservation | `scripts/identity.mjs`; local durable `.build/ledger/<scope>.json`, atomic directory lock, every attempt consumes an ordinal |
 | Concurrency | Complete local builds serialize using `.build/invocation.lock`; separate allocators use the scope lock; the focused test races eight reservations |
 | Time and provenance | Capture UTC once before Vite compilation; full Git SHA, dirty flag, SHA-256 build-input fingerprint, target `web` |
+| Input inventory | `scripts/inputs.mjs` records every input path, byte count and SHA-256 in `dist/build-inputs.json`; its checksum/count are embedded in the manifest |
+| Reproducibility check | `node scripts/verify-build.mjs` compares every raw input against the declared Git commit and rechecks the aggregate; LF text and tracked inputs are required by the builder |
 | Injection | `.build/manifests/<identity>.json` → `BUILD_MANIFEST_PATH` → Vite define → `src/build.js` |
 | Game UI | Persistent, wrapping, selectable `#build-identity` footer in `src/main.js` |
 | Production output | `dist/build-manifest.json`; identical metadata in JS; versioned `artifacts/<identity>/` enclosing output |
@@ -24,7 +26,9 @@ Generated reports, ledgers, and artifacts are ignored by Git to avoid timestamp-
 
 ## Review and CI Boundaries
 
-This task is local only. No PR number exists for these changes. Default scope is `local-YYYYMMDD`; local ordinals are not PR ordinals. A PR scope requires explicit `BUILD_SCOPE=pr-N` and a durable shared `BUILD_LEDGER_DIR`; the build rejects a PR scope without that ledger. CI currently has no durable PR allocator configured and must not claim PR build identity. That hosted setup remains pending, as do PR descriptions and release/deployment evidence. The existing deployment workflow has not been run or reconfigured by this task.
+The direct scene review is draft PR #17, based on original PR #15 source. Local artifacts use a separate explicit `local-scene-20261003` scope and retained ledger; these are not PR ordinals. A PR scope requires explicit `BUILD_SCOPE=pr-N` and a durable shared `BUILD_LEDGER_DIR`; the build rejects a PR scope without that ledger. A shared PR allocator remains unconfigured. CI uses a unique `ci-<run>-attempt-<attempt>` scope, with an ordinal inside that scope; it records the built revision and PR head separately. No merge or deployment is authorized.
+
+The builder hashes the same sorted path/raw-byte algorithm used historically, now retaining the per-file inventory. It rejects untracked/ignored inputs, rejects CRLF text inputs, and checks the input fingerprint again after compilation. `.gitattributes` pins repository text to LF for portable checkout bytes. Generated metadata remains outside the input roots. Original build 007 is not relabeled or repaired: its ZIP integrity and gameplay QA are verified, while its historical source-input fingerprint remains unresolved. See the PR #16 QA note and [Direct Scene Review](SCENE-REVIEW.md).
 
 A failed or interrupted attempt keeps its reservation. Do not remove lock directories while an owning build is running. After an interrupted process is positively confirmed stopped, remove only its empty stale lock and retain the ledger. Reusing a ZIP, HTML file, or output folder does not allocate or relabel it.
 

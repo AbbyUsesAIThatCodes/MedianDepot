@@ -12,6 +12,7 @@ const errors = [], network = [];
 page.on('pageerror', error => errors.push(error.message));
 page.on('request', request => { if (/^https?:/.test(request.url())) network.push(request.url()); });
 await page.goto(pathToFileURL(path.resolve(artifact, 'Play Median Depot.html')).href);
+await page.locator('#controls-toggle').click();
 await page.locator('#crate-select').waitFor({ state: 'visible' });
 assert.equal(await page.locator('#build-identity').textContent(), manifest.identifier);
 for (const [label, moves] of [['C02',1],['C05',3],['C04',2]]) {
