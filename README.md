@@ -1,12 +1,10 @@
 # Median Depot
 
-A 3D classroom game about **median**, set in a warm, cartoony rail yard. Sort intact cargo crates, select the middle observation, and submit its quantity.
+A 3D classroom game about **median**, in the rail yard beside Mean Machine's foam factory. Sort intact pallets, select the middle observation, and submit its quantity.
 
-The larger shared factory world with **Mean Machine**, pair highlights, and even-count instruction are planned follow-ups.
+**Current Local Development:** Issue #2 adds shared foam-ring pallets and the factory-to-yard opening. Both games consume the same exterior pose and world sources; MedianDepot swings into the yard. **Skip Intro** settles immediately, and **Reduce Motion** cuts to the same stable teaching view. Replay and shipment changes stay in the yard. Existing shipment IDs and quantities remain unchanged. This work has not been published or deployed.
 
-**Version 0.2.0:** The 3D yard fills the browser window, with collapsible overlay controls and no permanent bottom quantities strip (Issue #11). Built on the sorting-and-odd-median foundation from Issue #1. Two fixed five-crate shipments, including repeated quantities. No account, timer, backend, or runtime CDN required.
-
-![The Median Depot 3D rail yard and sorting controls](docs/images/median-depot.png)
+The accepted release baseline remains **0.2.0**. Local review builds use explicit development scope, a durable ordinal, UTC timestamp, source revision, and dirty-source fingerprint. See [Build Identity](docs/BUILD_IDENTITY.md) and the generated [Current Local Build](docs/CURRENT_BUILD.md).
 
 ## Launch Locally
 
@@ -26,16 +24,16 @@ npm run build
 npm run preview
 ```
 
-Open the preview URL, normally `http://127.0.0.1:4173`. Serve the generated `dist/` folder with a static HTTP server; opening `index.html` as a local file is not supported.
+Open the preview URL, normally `http://127.0.0.1:4173`. Serve `dist/` with a static HTTP server, or open the separately bundled **Play Median Depot.html** directly for offline play. The normal `index.html` entry still requires HTTP. Versioned copies are placed in `artifacts/<full-build-identity>/`.
 
 ## Play a Shipment
 
-1. Drag whole crates in the 3D yard, or open **Yard Controls**, choose **Select a Crate**, and use **Move Left** / **Move Right**. Keyboard: Tab to the selector, use arrow keys to choose a crate (Enter to confirm if the native menu requires it), then Tab to a Move button and press Enter or Space.
+1. Drag whole pallets in the 3D yard, or open **Yard Controls**, choose **Select a Pallet**, and use **Move Left** / **Move Right**. Keyboard: Tab to the selector, use arrow keys to choose a crate (Enter to confirm if the native menu requires it), then Tab to a Move button and press Enter or Space.
 2. Arrange quantities from least to greatest, then choose **Check My Order**. Equal quantities may be in either order.
-3. Select the middle crate. Enter its quantity under **Median Quantity**, then **Submit Median**. The correct value alone does not count if a different crate is selected.
+3. Select the middle pallet. Enter its quantity under **Median Quantity**, then **Submit Median**. The correct value alone does not count if a different crate is selected.
 4. **Replay Shipment** restores the exact initial arrival order. **Edit the Order** returns to sorting without changing values.
 
-Crate IDs travel with the crates. **Quantity** is the number inside; **Position** is the crate's current place in the row. Original quantities and IDs are always available in **Shipment Manifest**. That dialog also contains a selectable replay link. **Yard Controls** hides/reopens the overlay without changing order, selection, phase, or a typed answer. Escape hides the overlay when a dialog or native selector is not using that key. **Fullscreen** optionally hides browser chrome; the yard already fills the browser viewport by default. **Reduce Motion** is inside the overlay. All of these controls preserve the current arrangement.
+Pallet IDs travel with the crates. **Quantity** is the number inside; **Position** is the crate's current place in the row. Original quantities and IDs are always available in **Shipment Manifest**. That dialog also contains a selectable replay link. **Yard Controls** hides/reopens the overlay without changing order, selection, phase, or a typed answer. Escape hides the overlay when a dialog or native selector is not using that key. **Fullscreen** optionally hides browser chrome; the yard already fills the browser viewport by default. **Reduce Motion** is inside the overlay. All of these controls preserve the current arrangement.
 
 | Shipment Code | Arrival Quantities | Sorted Quantities | Median |
 | --- | --- | --- | --- |
@@ -48,7 +46,7 @@ Append `?shipment=MD-1-002` to the launch URL to reproduce that shipment. Codes 
 
 The teacher's standing target for all educational games is **student laptops**. Prioritize laptop windows, mouse/trackpad input, keyboard access, and readable classroom projection. Phone-specific layouts, screenshots, and testing are outside this project's scope.
 
-On shorter laptop windows the overlay scrolls internally; the page and yard remain fixed to the viewport. The camera frames all five crates in the area clear of the open overlay. Collapse **Yard Controls** for an unobstructed yard.
+On shorter laptop windows the overlay scrolls internally; the page and yard remain fixed to the viewport. The camera frames all five pallets in the area clear of the open overlay. Collapse **Yard Controls** for an unobstructed yard.
 
 ## GitHub Pages
 
@@ -77,15 +75,15 @@ Both games begin outside the same factory in the same cartoon place:
 
 | Game | Camera Destination | Student Action |
 | --- | --- | --- |
-| Mean Machine | Inside the factory | Redistribute blocks among available bays until every bay has the same amount. |
-| Median Depot | Away from the factory entrance toward the rail yard | Sort whole crates and find the middle observation or observations. |
+| Mean Machine | Inside the factory | Redistribute foam rings or equal fractional layers among bays until quantities are equal. |
+| Median Depot | Away from the factory entrance toward the rail yard | Sort whole pallets and find the middle observation or observations. |
 
-The games are intended to share aesthetics and assets, especially crates. The exact asset-sharing mechanism remains open. This repository records the Median Depot work; companion-repository changes receive their own scoped PR.
+The shared source and camera interface are documented in [Shared World Contract](docs/SHARED-WORLD-CONTRACT.md). MeanMachine integration is separate; the parent coordinates a frozen source copy.
 
 ## Planned Features
 
 - Example Mode and Challenge Mode.
-- Intact-crate sorting, including repeated values as separate observations.
+- Intact-pallet sorting, including repeated values as separate observations.
 - Toggleable mirrored pair highlights with a distinct middle marker.
 - Odd-count median and averaging the two middle values for even counts.
 - Stable, replayable shipments.

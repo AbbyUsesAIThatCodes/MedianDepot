@@ -1,0 +1,33 @@
+{
+  "assetSet": "foam-factory-world",
+  "version": "1.0.0",
+  "ownerRepository": "AbbyUsesAIThatCodes/MedianDepot",
+  "originalBaseRevision": "08e90aed0a884d25c435adfd5c010487ebb765bf",
+  "provenance": "Original procedural project source. Authorized companion reuse in MeanMachine. No external artwork or proprietary curriculum content.",
+  "runtime": {
+    "three": "0.186.1",
+    "license": "MIT; preserve public/licenses/three-LICENSE.txt"
+  },
+  "coordinateSystem": "Y-up, +Z forward; world units",
+  "exterior": {
+    "position": [
+      22,
+      18,
+      32
+    ],
+    "target": [
+      -6,
+      2,
+      -4
+    ],
+    "fov": 35,
+    "roll": 0
+  },
+  "files": {
+    "palette.js": "9b76fd8f78b3e51ddd88e9fe930be01657125e5287772102177d678fd71791fc",
+    "primitives.js": "44a9b57b4d3a3e48799c52375c29d8024c20e731c795ae9b40f958c6c7290678",
+    "cargo.js": "6ad117c13b406b73516a6bcde2641a21036556dbe11ac4f59d022d0ec484e2e3",
+    "world.js": "1f212faa56908be5719bddef6f4356704fc85b5353f2fc31fa598cccac573928",
+    "camera.js": "e41dab2b7b8e28dee21c7e3dd859ac473d0c2ca11b6bdcac4acd651f55ceca29"
+  }
+}
