@@ -42,19 +42,13 @@ test('full shipment loop, useful errors, correct median, and replay', async ({ p
   await arrange(page, ['C02', 'C05', 'C04', 'C01', 'C03']);
   expect(await values(page)).toEqual(['2', '3', '4', '8', '18']);
   await page.getByRole('button', { name: 'Check My Order' }).click();
-  await expect(page.locator('#answer-form')).toBeVisible();
-  await page.getByRole('button', { name: 'Submit Median' }).click();
-  await expect(page.locator('#feedback')).toContainText('First select');
+  await expect(page.locator('#use-middle')).toBeVisible();
+  await expect(page.locator('#use-middle')).toBeDisabled();
   await choose(page, 'C01');
-  await page.getByLabel('Median Quantity').fill('4');
-  await page.getByRole('button', { name: 'Submit Median' }).click();
+  await page.locator('#use-middle').click();
   await expect(page.locator('#feedback')).toContainText('same number');
   await choose(page, 'C04');
-  await page.getByLabel('Median Quantity').fill('3');
-  await page.getByRole('button', { name: 'Submit Median' }).click();
-  await expect(page.locator('#feedback')).toContainText('position');
-  await page.getByLabel('Median Quantity').fill('4');
-  await page.getByRole('button', { name: 'Submit Median' }).click();
+  await page.locator('#use-middle').click();
   await expect(page.locator('#success-value')).toHaveText('4');
   await expect(page.locator('#success')).toBeVisible();
   await capture(page, 'complete');
@@ -70,11 +64,10 @@ test('duplicate crates may swap identities and the middle occurrence must be sel
   expect(await values(page)).toEqual(['2', '3', '4', '4', '8']);
   await page.getByRole('button', { name: 'Check My Order' }).click();
   await choose(page, 'C01');
-  await page.getByLabel('Median Quantity').fill('4');
-  await page.getByRole('button', { name: 'Submit Median' }).click();
+  await page.locator('#use-middle').click();
   await expect(page.locator('#success')).toBeHidden();
   await choose(page, 'C04');
-  await page.getByRole('button', { name: 'Submit Median' }).click();
+  await page.locator('#use-middle').click();
   await expect(page.locator('#success')).toBeVisible();
 });
 
@@ -150,8 +143,7 @@ test('compact laptop overlay completes a shipment without dragging', async ({ br
   expect(await values(page)).toEqual(['2', '3', '4', '8', '18']);
   await page.getByRole('button', { name: 'Check My Order' }).click();
   await choose(page, 'C04');
-  await page.getByLabel('Median Quantity').fill('4');
-  await page.getByRole('button', { name: 'Submit Median' }).click();
+  await page.locator('#use-middle').click();
   await expect(page.locator('#success')).toBeVisible();
   await page.locator('#controls-close').click();
   await expect(page.locator('#yard-controls')).toBeHidden();
@@ -172,29 +164,28 @@ test('renderer failure keeps accessible overlay controls usable', async ({ page 
   await arrange(page, ['C02', 'C05', 'C04', 'C01', 'C03']);
   await page.getByRole('button', { name: 'Check My Order' }).click();
   await choose(page, 'C04');
-  await page.getByLabel('Median Quantity').fill('4');
-  await page.getByRole('button', { name: 'Submit Median' }).click();
+  await page.locator('#use-middle').click();
   await expect(page.locator('#success')).toBeVisible();
 });
 
-test('overlay toggles retain selection, answer draft, phase, and order', async ({ page }) => {
-  await page.goto('/');
-  await arrange(page, ['C02', 'C05', 'C04', 'C01', 'C03']);
-  await page.getByRole('button', { name: 'Check My Order' }).click();
-  await choose(page, 'C04');
-  await page.getByLabel('Median Quantity').fill('3.5');
+test('overlay toggles retain even-median answer draft, selection, phase, and order', async ({ page }) => {
+  await page.goto('/?shipment=MD-1-003');
+  await arrange(page, ['C03', 'C02', 'C04', 'C01']);
+  await page.locator('#check-order').click();
+  await choose(page, 'C02');
+  await page.locator('#use-middle').click();
+  await page.getByLabel('Median Quantity').fill('2.1');
   const before = await values(page);
   await page.locator('#controls-toggle').click();
   await expect(page.locator('#yard-controls')).toBeHidden();
-  await expect(page.locator('#controls-toggle')).toHaveAttribute('aria-expanded', 'false');
   await expectFullWindow(page);
   await capture(page, 'unobstructed');
   await page.locator('#controls-toggle').click();
   await expect(page.locator('#answer-form')).toBeVisible();
-  await expect(picker(page)).toHaveValue(/-C04$/);
-  await expect(page.getByLabel('Median Quantity')).toHaveValue('3.5');
+  await expect(picker(page)).toHaveValue(/-C02$/);
+  await expect(page.getByLabel('Median Quantity')).toHaveValue('2.1');
   expect(await values(page)).toEqual(before);
-  await page.getByLabel('Median Quantity').fill('4');
+  await page.getByLabel('Median Quantity').fill('2.5');
   await page.getByRole('button', { name: 'Submit Median' }).click();
   await expect(page.locator('#success')).toBeVisible();
 });

@@ -1,5 +1,18 @@
 # Local Development Verification
 
+## September 30: Variable Counts and Middle Activation — Issue #12
+
+The separate local Issue #12 slice uses the frozen shared source from Issue #2 commit `871ca3d2e5d605524cd846db13de3e22a1ea9658`; `src/shared/` is byte-for-byte unchanged. Existing Issues #3/#4 supply the pair/averaging context; no duplicate issues or PRs were created.
+
+- `npm test`: **16 passing**. All eight immutable shipment definitions; original small-shipment permutations; rotations/reversals and every destination for larger rows; zero and distinct duplicate IDs; valid positional odd activation; either even middle; blank, invalid, one-middle-only, and wrong-average rejection; correct fractional medians; reset/edit locks; all pair counts 2–9; frozen-source SHA-256 consistency.
+- `npm run test:browser`: **22 passing**. The 14 shared-world/regression scenarios remain, with the old odd-count input checks adapted to activation. New checks play every added shipment, preserve appearance and visible cargo counts, toggle text-labeled pairs, reject wrong middle positions, calculate 2.5 and 3.5, activate each even middle through actual double-clicks, and pick all nine pallets in a 1024×600 window. Repeated activation and Next Shipment preserve state and stay in the yard.
+- `npm run build`: succeeds. Local Build 5 was checked from disk with `scripts/verify-offline.mjs`; identity matched the output folder, manifest, UI, and report, the full original shipment completed, and no page errors or HTTP requests occurred.
+- Visually reviewed the seven- and nine-pallet rows, both middle markers, covered high-value cargo, visible zero pallet, 2.5 completion equation, and compact unobstructed nine-pallet view. Pair colors live on separate frames; numbered Pair/Middle labels provide noncolor cues. The compact status strip clears the build footer.
+
+Evidence: `evidence/issue-12/`, including `sorted-9-pallets.png`, `nine-pallets-unobstructed.png`, and `fractional-median-complete.png`. Generated current-build and offline reports record the final packaged checkpoint without introducing a timestamp-only source commit.
+
+The environment and physical-device limitations below still apply. Eight fixed shipments provide practice, not a complete Example/Challenge curriculum or independent-mastery assessment. Public curriculum alignment and scope limits are recorded in [Learning Notes](LEARNING-NOTES.md).
+
 ## September 30: Shared World and Camera — Issue #2
 
 Environment: Windows, Node 22.12.0 / npm 10.9.0, Playwright 1.63.0, headless Microsoft Edge 154.0.4258.37 with software WebGL. Laptop viewports: 1024×600, 1280×720, 1366×768, 1440×1000, and 1920×1080. This is local development, not a deployment or classroom hardware acceptance.

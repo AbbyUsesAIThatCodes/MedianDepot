@@ -1,7 +1,8 @@
 import './style.css';
-import { SHIPMENTS, resolveShipment, createGame, orderedCrates, selectCrate, moveCrate, checkOrder, submitMedian, editOrder } from './game.js';
+import { SHIPMENTS, resolveShipment, createGame, orderedCrates, selectCrate, moveCrate, checkOrder, submitMedian, editOrder, middleInfo, activateMedian } from './game.js';
 import { createDepot } from './scene.js';
 import { BUILD } from './build.js';
+import { pairMarkers } from './pairs.js';
 
 const icons = {
   reset: '<path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/>',
@@ -21,6 +22,7 @@ let feedback = '';
 let feedbackKind = 'neutral';
 let depot;
 let introPlaying = true;
+let showPairs = true;
 
 document.querySelector('#app').innerHTML = `
   <main aria-label="Median Depot Sorting Yard">
@@ -44,11 +46,11 @@ document.querySelector('#app').innerHTML = `
           <p id="task-description">Arrange quantities from least to greatest. Each pallet stays whole.</p>
           <div id="selection" class="selection"><label for="crate-select">Select a Pallet</label><select id="crate-select" aria-describedby="selected-detail"></select><div class="selection-readout"><strong id="selected-value">No Pallet Selected</strong><small id="selected-detail">Choose here or tap a pallet in the yard.</small></div></div>
           <div id="move-controls" class="move-controls"><button id="move-left" aria-label="Move Selected Pallet Left"><span aria-hidden="true">←</span> Move Left</button><button id="move-right" aria-label="Move Selected Pallet Right">Move Right <span aria-hidden="true">→</span></button></div>
-          <form id="answer-form" hidden><label for="median-answer">Median Quantity</label><div class="answer-field"><input id="median-answer" type="number" step="any" inputmode="decimal" autocomplete="off" placeholder="?" aria-describedby="answer-hint"><span>items</span></div><small id="answer-hint">Use the quantity, not its position in the row.</small><button class="primary" type="submit">Submit Median ${icon('arrow')}</button></form>
+          <div id="pair-controls" hidden><label class="motion-option"><input type="checkbox" id="show-pairs" checked> Show Pairs</label><p id="pair-summary" class="pair-summary"></p></div><button id="use-middle" class="primary" hidden>Use Selected Pallet</button><form id="answer-form" hidden><p id="middle-equation" class="middle-equation"></p><label for="median-answer">Median Quantity</label><div class="answer-field"><input id="median-answer" type="number" step="any" inputmode="decimal" autocomplete="off" placeholder="?" aria-describedby="answer-hint"><span>items</span></div><small id="answer-hint">Use the quantity, not its position in the row.</small><button class="primary" type="submit">Submit Median ${icon('arrow')}</button></form>
           <div id="success" class="success" hidden><span class="success-icon">${icon('check')}</span><span>THE MEDIAN IS</span><strong id="success-value"></strong><p id="success-explanation"></p></div>
           <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
           <button id="check-order" class="primary">Check My Order ${icon('arrow')}</button>
-          <div class="replay-actions"><button id="edit-order" class="text-button" hidden>Edit the Order</button><button id="reset" class="reset-button">${icon('reset')} Replay Shipment</button></div>
+          <div class="replay-actions"><button id="next-shipment" class="primary" hidden>Next Shipment</button><button id="edit-order" class="text-button" hidden>Edit the Order</button><button id="reset" class="reset-button">${icon('reset')} Replay Shipment</button></div>
           <div class="panel-settings"><label class="shipment-picker" for="shipment">Shipment</label><select id="shipment">${SHIPMENTS.map(s => `<option value="${s.code}">${s.code} · ${s.title}</option>`).join('')}</select><label class="motion-option"><input type="checkbox" id="reduced-motion"> Reduce Motion</label><p id="code-notice" class="notice" role="status" hidden></p></div>
         </div>
       </div>
@@ -57,7 +59,7 @@ document.querySelector('#app').innerHTML = `
     <p id="movement-status" class="sr-only" role="status" aria-live="polite"></p>
     <footer id="build-identity" class="build-identity" aria-label="Build Identity"></footer>
   </main>
-  <dialog id="help-dialog" aria-labelledby="help-title"><div class="dialog-heading"><p class="eyebrow">WELCOME TO THE YARD</p><button class="dialog-close icon-button" aria-label="Close How to Play">×</button></div><h2 id="help-title">How to Play</h2><ol class="help-list"><li><strong>Sort the quantities.</strong>Drag pallets in the yard, or use Select a Pallet in Yard Controls followed by Move Left or Move Right.</li><li><strong>Check your order.</strong>Quantities should run from least to greatest. Equal quantities can be in either order.</li><li><strong>Find the middle.</strong>Select the middle pallet, then type its quantity and submit.</li></ol><p><strong>Keyboard:</strong> Open Yard Controls, Tab to Select a Pallet, and use the arrow keys to choose. Tab to Move Left or Move Right and press Enter or Space to move the selected pallet. Native select menus may require Enter to confirm. Escape hides Yard Controls; its toolbar button reopens them. All shipment actions remain available in the overlay.</p><p><strong>Replay Shipment</strong> restores the original arrival order. Changing shipments starts that shipment fresh.</p><button class="primary dialog-close">Back to the Yard ${icon('arrow')}</button></dialog>
+  <dialog id="help-dialog" aria-labelledby="help-title"><div class="dialog-heading"><p class="eyebrow">WELCOME TO THE YARD</p><button class="dialog-close icon-button" aria-label="Close How to Play">×</button></div><h2 id="help-title">How to Play</h2><ol class="help-list"><li><strong>Sort the quantities.</strong>Drag pallets in the yard, or use Select a Pallet in Yard Controls followed by Move Left or Move Right.</li><li><strong>Check your order.</strong>Quantities should run from least to greatest. Equal quantities can be in either order.</li><li><strong>Find the middle.</strong>Double-click the middle pallet, or select it and choose Use Selected Pallet. With an even count, either middle pallet opens a calculation using both middle quantities. Add them and divide by 2.</li></ol><p><strong>Keyboard:</strong> Open Yard Controls, Tab to Select a Pallet, and use the arrow keys to choose. Tab to Move Left or Move Right and press Enter or Space to move the selected pallet. Native select menus may require Enter to confirm. Escape hides Yard Controls; its toolbar button reopens them. All shipment actions remain available in the overlay.</p><p><strong>Replay Shipment</strong> restores the original arrival order. Changing shipments starts that shipment fresh.</p><button class="primary dialog-close">Back to the Yard ${icon('arrow')}</button></dialog>
   <dialog id="manifest-dialog" aria-labelledby="manifest-title"><div class="dialog-heading"><p class="eyebrow">ORIGINAL ARRIVAL RECORD</p><button class="dialog-close icon-button" aria-label="Close Shipment Manifest">×</button></div><h2 id="manifest-title">Shipment Manifest</h2><p id="manifest-code"></p><table><thead><tr><th>Arrival</th><th>Pallet ID</th><th>Quantity</th></tr></thead><tbody id="manifest-body"></tbody></table><p>Each ID stays with its pallet. Replay restores this exact arrival order.</p><p class="share-label">Replay Link</p><input id="replay-link" type="text" readonly aria-label="Replay Link"><button class="primary dialog-close">Back to the Yard ${icon('arrow')}</button></dialog>
 `;
 
@@ -86,6 +88,17 @@ function select(id) {
   setFeedback();
   render();
 }
+function activate(id) {
+  if (introPlaying || state.phase === 'complete') return;
+  const result = activateMedian(state, id);
+  state = result.state;
+  setFeedback(result.message, result.ok ? 'good' : 'retry');
+  render();
+  if (result.ok) {
+    if (!controlsOpen) setControlsOpen(true, false);
+    (state.phase === 'complete' ? $('#next-shipment') : $('#median-answer')).focus({ preventScroll: false });
+  }
+}
 function move(id, index) {
   if (introPlaying) return;
   if (state.phase !== 'sort' || !state.order.includes(id) || state.order.indexOf(id) === index) return;
@@ -106,6 +119,7 @@ function replay() {
 function render() {
   const crates = orderedCrates(state);
   const selected = crates.find(crate => crate.id === state.selectedId);
+  const info = middleInfo(state);
   const isSort = state.phase === 'sort';
   const isComplete = state.phase === 'complete';
   // A native selector supplies keyboard/touch access without duplicating a permanent row.
@@ -124,7 +138,15 @@ function render() {
   $('#move-left').disabled = !selected || state.order.indexOf(selected.id) === 0;
   $('#move-right').disabled = !selected || state.order.indexOf(selected.id) === crates.length - 1;
   $('#move-controls').hidden = !isSort;
-  $('#answer-form').hidden = state.phase !== 'median';
+  $('#answer-form').hidden = !(state.phase === 'median' && info.even && state.middleActivated);
+  $('#use-middle').hidden = state.phase !== 'median';
+  $('#use-middle').disabled = !selected;
+  $('#pair-controls').hidden = isSort;
+  $('#pair-summary').hidden = !showPairs;
+  $('#pair-summary').textContent = pairMarkers(crates.length).map((marker, index) => `${index + 1}: ${marker.label}`).join(' · ');
+  $('#middle-equation').textContent = `(${info.values.join(' + ')}) ÷ 2 = ?`;
+  $('#answer-hint').textContent = 'Use both middle values. Add their quantities and divide by 2.';
+  $('#next-shipment').hidden = !isComplete;
   $('#check-order').hidden = !isSort;
   $('#edit-order').hidden = isSort;
   $('#selection').hidden = isComplete;
@@ -132,11 +154,11 @@ function render() {
   $('#feedback').textContent = feedback;
   $('#feedback').className = `feedback ${feedbackKind}`;
   $('#feedback').hidden = !feedback;
-  $('#task-title').textContent = isSort ? 'Put the Pallets in Order.' : isComplete ? 'Right in the Middle.' : 'Find the Middle Pallet.';
-  $('#task-description').textContent = isSort ? 'Arrange quantities from least to greatest. Each pallet stays whole.' : isComplete ? 'Nicely done, yard crew.' : 'Select the pallet with the same number on each side, then enter its quantity.';
-  $('#shipment-badge').textContent = `${state.code} · 5 Pallets`;
+  $('#task-title').textContent = isSort ? 'Put the Pallets in Order.' : isComplete ? 'Right in the Middle.' : info.even ? (state.middleActivated ? 'Average Both Middle Values.' : 'Find the Middle Pallets.') : 'Find the Middle Pallet.';
+  $('#task-description').textContent = isSort ? 'Arrange quantities from least to greatest. Each pallet stays whole.' : isComplete ? 'The ordered observations reveal the center.' : info.even ? 'There are two middle observations. Activate either one, then calculate using both quantities.' : 'Double-click the middle pallet, or select it and choose Use Selected Pallet.';
+  $('#shipment-badge').textContent = `${state.code} · ${crates.length} Pallets`;
   $('#yard-status').textContent = isSort ? 'Ready for Sorting' : isComplete ? 'Shipment Complete' : 'Order Checked';
-  $('.scene-hint').textContent = isSort ? 'Drag pallets from least to greatest. Controls are in the overlay.' : isComplete ? 'Shipment complete. Replay to sort again.' : 'Select the pallet in the middle.';
+  $('.scene-hint').textContent = isSort ? 'Drag pallets from least to greatest. Controls are in the overlay.' : isComplete ? 'Shipment complete. Replay to sort again.' : 'Double-click the middle, or use Yard Controls.';
   $('#reset').innerHTML = `${icon('reset')} ${isComplete ? 'Try This Shipment Again' : 'Replay Shipment'}`;
   ['sort', 'median', 'done'].forEach((step, index) => {
     const currentIndex = isSort ? 0 : isComplete ? 2 : 1;
@@ -145,12 +167,19 @@ function render() {
     li.classList.toggle('completed', index < currentIndex);
   });
   if (isComplete) {
-    $('#success-value').textContent = selected.quantity;
-    $('#success-explanation').textContent = `Two pallets on the left. Two on the right. The middle pallet holds ${selected.quantity} items.`;
+    $('#success-value').textContent = info.median;
+    $('#success-explanation').textContent = info.even ? `(${info.values.join(' + ')}) ÷ 2 = ${info.median}. Both middle observations count, even when their quantities match. The median can lie between two values.` : `${info.sideCount} pallets on each side. The middle pallet holds ${info.median} items.`;
   }
-  depot?.update(crates, state);
+  depot?.update(crates, state, { showPairs });
 }
 
+$('#use-middle').addEventListener('click', () => activate(state.selectedId));
+$('#show-pairs').addEventListener('change', event => { showPairs = event.target.checked; render(); });
+$('#next-shipment').addEventListener('click', () => {
+  if (introPlaying || state.phase !== 'complete') return;
+  const next = SHIPMENTS[(SHIPMENTS.findIndex(s => s.code === state.code) + 1) % SHIPMENTS.length];
+  state = createGame(next.code); $('#shipment').value = next.code; $('#code-notice').hidden = true; syncURL(); replay(); $('#crate-select').focus();
+});
 $('#crate-select').addEventListener('change', event => { if (event.target.value) select(event.target.value); });
 $('#move-left').addEventListener('click', () => move(state.selectedId, state.order.indexOf(state.selectedId) - 1));
 $('#move-right').addEventListener('click', () => move(state.selectedId, state.order.indexOf(state.selectedId) + 1));
@@ -164,7 +193,7 @@ $('#check-order').addEventListener('click', () => {
 });
 $('#answer-form').addEventListener('submit', event => {
   event.preventDefault();
-  if (introPlaying) return;
+  if (introPlaying || state.phase === 'complete') return;
   const result = submitMedian(state, $('#median-answer').value);
   state = result.state;
   setFeedback(result.message, result.ok ? 'good' : 'retry');
@@ -252,7 +281,7 @@ function endIntro(reason) {
   $('nav').inert = false;
   if (reason !== 'interrupted') $('#crate-select').focus({ preventScroll: true });
 }
-try { depot = createDepot($('#scene'), { onSelect: select, onMove: move, onUnavailable: rendererUnavailable, onIntroEnd: endIntro, reducedMotion: () => reduced, viewBounds }); }
+try { depot = createDepot($('#scene'), { onSelect: select, onMove: move, onActivate: activate, onUnavailable: rendererUnavailable, onIntroEnd: endIntro, reducedMotion: () => reduced, viewBounds }); }
 catch (error) { console.warn('3D view unavailable:', error.message); rendererUnavailable(); }
 const overlayObserver = new ResizeObserver(() => depot?.resize());
 overlayObserver.observe($('#yard-controls'));

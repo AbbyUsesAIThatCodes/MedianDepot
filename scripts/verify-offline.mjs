@@ -20,8 +20,7 @@ for (const [label, moves] of [['C02',1],['C05',3],['C04',2]]) {
 }
 await page.locator('#check-order').click();
 await page.locator('#crate-select').selectOption('MD-1-001-C04');
-await page.locator('#median-answer').fill('4');
-await page.locator('#answer-form button').click();
+await page.locator('#use-middle').click();
 await page.locator('#success').waitFor({ state: 'visible' });
 assert.equal(await page.locator('#success-value').textContent(), '4');
 assert.deepEqual(errors, []);
