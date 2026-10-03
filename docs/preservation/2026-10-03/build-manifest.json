@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "status": "development",
+  "codename": null,
+  "codenameSlug": "Uncodenamed",
+  "note": "Local development on the accepted 0.2.0 baseline. No next release number or codename has been agreed.",
+  "scope": "local-20260930",
+  "ordinal": 7,
+  "builtAt": "2026-09-30T14:01:57.306Z",
+  "revision": "60cd6252a52106a1b56296a03bb18d24923d6edb",
+  "dirty": false,
+  "sourceFingerprint": "c7c5c4d8a9de9f80a639071df8e3149ab6374cb311181b3ac217273e0141a622",
+  "target": "web",
+  "identifier": "0.2.0_Uncodenamed_local-20260930_build-007_20260930T140157Z_g60cd6252a521_web"
+}
