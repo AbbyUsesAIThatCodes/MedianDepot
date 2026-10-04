@@ -1,0 +1,40 @@
+
+> median-depot@0.2.0 test:browser
+> playwright test
+
+
+Running 29 tests using 1 worker
+
+(node:50980) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\browser\hover.spec.js:10:1 ΓÇ║ nine-pallet hover, paired lights and median arrows remain independent with dropdown focus (6.0s)
+  ok  2 tests\browser\hover.spec.js:39:1 ΓÇ║ keyboard control clears mouse hover without changing the median, and replay and shipments stay clear (5.7s)
+  ok  3 tests\browser\hover.spec.js:69:1 ΓÇ║ stationary mouse hover follows the current pallet after animated replay moves the row underneath it (5.8s)
+  ok  4 tests\browser\hover.spec.js:85:1 ΓÇ║ drag release over controls and pointer cancellation clear hover without inventing a median selection (2.9s)
+  ok  5 tests\browser\intro.spec.js:9:1 ΓÇ║ shared exterior, animated arrival, and stable teaching camera preserve cargo (10.0s)
+  ok  6 tests\browser\intro.spec.js:45:1 ΓÇ║ skip is idempotent while resizing and reduced motion reaches the same endpoint (2.6s)
+  ok  7 tests\browser\intro.spec.js:65:1 ΓÇ║ changing motion preference during the trip cuts once and preserves the shipment (2.3s)
+  ok  8 tests\browser\intro.spec.js:76:1 ΓÇ║ hidden-tab interruption settles once and a later context loss retains keyboard gameplay (1.5s)
+  ok  9 tests\browser\scene-controls.spec.js:5:1 ΓÇ║ yellow median arrows toggle independently of transparent hover glow (3.2s)
+  ok 10 tests\browser\scene-controls.spec.js:20:1 ΓÇ║ pallet drag wins over camera movement and a drag never toggles a median arrow (2.4s)
+  ok 11 tests\browser\scene-controls.spec.js:27:1 ΓÇ║ tiny pointer jitter counts as a tap, substantial movement cancels a pending double tap (2.4s)
+  ok 12 tests\browser\scene-controls.spec.js:36:1 ΓÇ║ background drag clamps the camera and keeps every pallet/arrow framed at all laptop sizes (5.3s)
+  ok 13 tests\browser\scene-controls.spec.js:54:1 ΓÇ║ keyboard camera buttons, reset, replay and shipment changes keep mathematical state separate (3.2s)
+  ok 14 tests\browser\scene-controls.spec.js:66:1 ΓÇ║ touchscreen drag and double-tap complete a shipment without opening Yard Controls (2.3s)
+  ok 15 tests\browser\shipment.spec.js:5:1 ΓÇ║ complete odd shipment by scene dragging and double toggle without opening a panel (3.5s)
+  ok 16 tests\browser\shipment.spec.js:32:1 ΓÇ║ duplicate quantities require the positional middle and equal pallets can swap order (3.4s)
+  ok 17 tests\browser\shipment.spec.js:48:1 ΓÇ║ manifest replay URL, unknown code and reload preserve immutable arrival data (3.1s)
+  ok 18 tests\browser\shipment.spec.js:62:1 ΓÇ║ keyboard selection, movement and toggle remain available in compact laptop controls (2.4s)
+  ok 19 tests\browser\shipment.spec.js:79:1 ΓÇ║ renderer failure still completes an even shipment using accessible controls (1.6s)
+  ok 20 tests\browser\shipment.spec.js:88:1 ΓÇ║ overlay toggles and resizing retain even candidates, answer draft and order (4.0s)
+  ok 21 tests\browser\shipment.spec.js:106:1 ΓÇ║ fullscreen and panel access preserve scene selection state (3.3s)
+  ok 22 tests\browser\variable.spec.js:5:3 ΓÇ║ 4 pallets retain zero/duplicates, toggle independent arrows and complete median 2.5 (3.1s)
+  ok 23 tests\browser\variable.spec.js:5:3 ΓÇ║ 6 pallets retain zero/duplicates, toggle independent arrows and complete median 4 (3.9s)
+  ok 24 tests\browser\variable.spec.js:5:3 ΓÇ║ 7 pallets retain zero/duplicates, toggle independent arrows and complete median 3 (3.7s)
+  ok 25 tests\browser\variable.spec.js:5:3 ΓÇ║ 9 pallets retain zero/duplicates, toggle independent arrows and complete median 4 (4.6s)
+  ok 26 tests\browser\variable.spec.js:5:3 ΓÇ║ 2 pallets retain zero/duplicates, toggle independent arrows and complete median 3.5 (2.8s)
+  ok 27 tests\browser\variable.spec.js:5:3 ΓÇ║ 3 pallets retain zero/duplicates, toggle independent arrows and complete median 3 (2.7s)
+  ok 28 tests\browser\variable.spec.js:34:1 ΓÇ║ either even selection order requires both correct middle positions and averaging (4.4s)
+  ok 29 tests\browser\variable.spec.js:47:1 ΓÇ║ all nine pallets remain pickable in compact framing and Next Shipment resets arrows/view (3.7s)
+
+  29 passed (1.8m)

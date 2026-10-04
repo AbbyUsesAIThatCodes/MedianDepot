@@ -1,5 +1,13 @@
 # Local Development Verification
 
+## October 4: Hover Indicator Follow-Up - Issue #12 / PR #17
+
+Build `0.2.0_Uncodenamed_local-scene-20261003_build-003_20261004T005915Z_gc4a348c8098d_web`, clean source `c4a348c8098dae9687f5cd9387a0613afb7e2c09`, passed **19 unit tests**, **29 packaged browser scenarios**, and **offline full-shipment completion** with no page errors and zero HTTP requests. All 27 source-input hashes match the declared Git commit. Only `src/scene.js` changed among runtime build inputs since build 002.
+
+The two new stale-hover checks first failed against preserved build 002: keyboard input retained C08's mouse glow, and animated replay retained C08 instead of the C02 now under the stationary pointer. Both pass in build 003. Four added scenarios cover mouse/median/pair separation, double-click toggle, keyboard focus, reordering, replay, shipment changes, animated settling, drag release over controls and simulated pointer cancellation. The existing 25 scenarios retain odd/even, duplicate/zero/fractional, touch emulation, camera/intro, laptop resize and renderer-fallback coverage.
+
+Inspected final nine-pallet captures with and without mouse hover, keyboard clearing and settled replay. Pair lighting remains intentional on all sorted positions; only the yellow arrow marks a median candidate. The screenshot's dropdown focus alone does not prove where the mouse was. No broad aesthetic, mathematical, shipment, camera-baseline or worksheet change was made. Physical classroom devices remain unverified. [Diagnosis And Evidence](HOVER-REVIEW.md).
+
 ## October 3: Packaged Direct Scene Review - Issue #12 / PR #17
 
 Verified immutable local build `0.2.0_Uncodenamed_local-scene-20261003_build-002_20261003T230803Z_g5bc26ce24081_web`, source `5bc26ce240810462395f1da28e19b783e73df1c5`, in Chromium 153.0.8010.12 on Windows with software WebGL.

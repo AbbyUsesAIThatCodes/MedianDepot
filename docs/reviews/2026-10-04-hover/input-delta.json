@@ -1,0 +1,10 @@
+{
+  "fromIdentifier": "0.2.0_Uncodenamed_local-scene-20261003_build-002_20261003T230803Z_g5bc26ce24081_web",
+  "toIdentifier": "0.2.0_Uncodenamed_local-scene-20261003_build-003_20261004T005915Z_gc4a348c8098d_web",
+  "changedInputs": [
+    "src/scene.js"
+  ],
+  "unchangedInputCount": 26,
+  "addedInputs": [],
+  "removedInputs": []
+}

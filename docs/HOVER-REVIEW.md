@@ -14,9 +14,11 @@ Only the scene's hover lifecycle changes. Retain the last mouse coordinates and 
 
 Median candidates, double-click rules, pair colors/styles/labels, pallet appearance, camera bounds, instructional text, all shipment IDs/quantities and math/answer feedback remain unchanged. A real mouse hovering over a nonmedian pallet still lights that pallet; only a yellow arrow denotes a median candidate.
 
-## Verification Checkpoint
+## Verification
 
-Development checks passed: 19 existing unit tests and 10 focused browser scenarios. Four new scenarios cover the exact nine-pallet report, independent indicators with dropdown focus, keyboard switching/reordering/replay/shipment changes, stationary-pointer animated replay, and drag release/cancellation. The two targeted checks failed for the expected stale-hover reason on original build 002 before the fix. Final immutable-artifact evidence is added after packaging.
+Build `0.2.0_Uncodenamed_local-scene-20261003_build-003_20261004T005915Z_gc4a348c8098d_web` passed all 29 browser scenarios against the immutable artifact, 19 existing unit tests, and offline completion with no page errors or HTTP requests. All 27 input files match clean source `c4a348c8098dae9687f5cd9387a0613afb7e2c09`; the only runtime input changed from build 002 is `src/scene.js`.
+
+Four new scenarios cover the exact nine-pallet report, independent indicators with dropdown focus, keyboard switching/reordering/replay/shipment changes, stationary-pointer animated replay through its settled endpoint, and drag release/cancellation. The two targeted checks failed for the expected stale-hover reason on original build 002 before the fix. The [Preserved Package And Evidence](reviews/2026-10-04-hover/README.md) includes before/after screenshots, the complete browser report and source/ZIP parity.
 
 Physical school touchscreens/trackpads and classroom projection remain owner-review checks. Existing compact-camera readability and original build 007 provenance limits remain as recorded in earlier review notes.
 

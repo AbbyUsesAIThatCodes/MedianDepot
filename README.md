@@ -4,6 +4,8 @@ A 3D classroom game about **median**, in the rail yard beside Mean Machine's foa
 
 **Current Review:** Draft PR #17 follows the owner's build 007 review under Issue #12. Drag pallets directly, double-click to toggle yellow median arrows, select both middle pallets for an even row, and calculate their average in the visible scene controls. Background dragging rotates a bounded, automatically fitted camera. Optional Yard Controls preserves keyboard and touch alternatives. The frozen shared world, shipment IDs, quantities and original build 007 remain unchanged. This review is not deployed. See [Direct Scene Review](docs/SCENE-REVIEW.md).
 
+**Latest Review Build:** The narrow [Hover Indicator Review](docs/HOVER-REVIEW.md) fixes a stale mouse glow after scene movement or keyboard input. Build 003, its package, exact source inventory and results are in [October 4 Review Evidence](docs/reviews/2026-10-04-hover/README.md). Median arrows, pair styling, accepted mechanics and worksheet data remain unchanged.
+
 The accepted release baseline remains **0.2.0**. Local review builds use explicit development scope, a durable ordinal, UTC timestamp, source revision, and dirty-source fingerprint. See [Build Identity](docs/BUILD_IDENTITY.md) and the generated [Current Local Build](docs/CURRENT_BUILD.md).
 
 ## Launch Locally
