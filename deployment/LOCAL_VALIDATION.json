@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "validatedAt": "2026-10-04T14:44:46.045Z",
+  "buildId": "0.2.0_Uncodenamed_local-scene-20261003_build-003_20261004T005915Z_gc4a348c8098d_web",
+  "runtimeRevision": "c4a348c8098dae9687f5cd9387a0613afb7e2c09",
+  "status": "passed",
+  "unitTests": {
+    "passed": 19,
+    "failed": 0
+  },
+  "browserSuites": [
+    {
+      "suite": "Packaged Chromium Browser Suite",
+      "passed": 29,
+      "status": "passed",
+      "reportSha256": "026269f29dd42f9178f1e9dd67e5a9b435219692b178d42be563bd284be4b2bb"
+    }
+  ],
+  "statistics": {
+    "browserScenarios": 29
+  },
+  "publicPayloadFiles": 7,
+  "preflight": "Project-path loading, all served byte hashes, manifest/visible identity, forbidden-file 404s, wrong-build/extra-file guards, and rollback loading passed.",
+  "limits": "Chromium on Abigail; fresh synthetic browser state. No physical school laptop, projector or screen-reader pilot claimed. Hosted CI was not run."
+}

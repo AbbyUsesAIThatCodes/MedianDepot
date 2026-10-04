@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "repo": "MedianDepot",
+  "buildId": "0.2.0_Uncodenamed_local-scene-20261003_build-003_20261004T005915Z_gc4a348c8098d_web",
+  "manifest": "build-manifest.json",
+  "runtimeRevision": "c4a348c8098dae9687f5cd9387a0613afb7e2c09",
+  "runtimeBuiltAt": "2026-10-04T00:59:15.705Z",
+  "reviewPR": 17,
+  "preparedAt": "2026-10-04T14:25:51.987Z",
+  "status": "Prepared Locally; Publication Requires A Successful Explicit Dispatch",
+  "rollbackRevision": "08e90aed0a884d25c435adfd5c010487ebb765bf",
+  "policy": "Promote existing runtime bytes without compilation or relabeling. Public reference is separately inventoried. No review archives, teacher keys, student records or private course material.",
+  "files": [
+    {
+      "path": "assets/index-80ZLozqx.js",
+      "bytes": 615438,
+      "sha256": "2386ee3ba0ebd8260695b24159390006463d9ff1fe3cea3bff7049793e8f86e4",
+      "origin": "unchanged reviewed runtime"
+    },
+    {
+      "path": "assets/index-CVY1BfEE.css",
+      "bytes": 13644,
+      "sha256": "c1c53d4849ac7a311fb0c1c65f424421def9fc6ed218393554f982e30e3644c3",
+      "origin": "unchanged reviewed runtime"
+    },
+    {
+      "path": "build-inputs.json",
+      "bytes": 4340,
+      "sha256": "acb994962abe871a43eceedd684d7d0587b7c2bd90152ad2eae46bc66a47c89d",
+      "origin": "unchanged reviewed runtime"
+    },
+    {
+      "path": "build-manifest.json",
+      "bytes": 774,
+      "sha256": "8a82869a85cb846b975ca3abaca0c0d201ef2214c9d43ceeb637eac0dd6df67c",
+      "origin": "unchanged reviewed runtime"
+    },
+    {
+      "path": "favicon.svg",
+      "bytes": 197,
+      "sha256": "8d8fcbdedc1e222b25da419c474f5998016742fb08d15fd271ea04efff903487",
+      "origin": "unchanged reviewed runtime"
+    },
+    {
+      "path": "index.html",
+      "bytes": 631,
+      "sha256": "5e37d66c09466c8bb9b36c99887c21920efcd186fea0cc81a191e009ff6e0795",
+      "origin": "unchanged reviewed runtime"
+    },
+    {
+      "path": "licenses/three-LICENSE.txt",
+      "bytes": 1081,
+      "sha256": "8b378ebe60e2fe500158cb0ac71cb5e8b7d92953c2abcc63a0eb90499653b5bc",
+      "origin": "unchanged reviewed runtime"
+    }
+  ]
+}

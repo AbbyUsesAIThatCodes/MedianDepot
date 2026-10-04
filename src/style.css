@@ -93,5 +93,70 @@ th { font-size: 11px; background: #edf0e6; }
 #replay-link { width: 100%; border: 1px solid var(--line); padding: 12px; border-radius: 8px; margin-bottom: 20px; background: #f4f6ee; color: var(--ink); font-size: 12px; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 .reduced-motion * { transition: none !important; }
-@media (max-width: 1000px), (max-height: 620px) { .app-header { top: max(12px, env(safe-area-inset-top)); left: max(12px, env(safe-area-inset-left)); right: max(12px, env(safe-area-inset-right)); } .brand { padding: 8px 11px 8px 8px; gap: 9px; } .brand h1 { font-size: 20px; } .brand small { font-size: 9px; letter-spacing: .3px; } .brand-mark { width: 35px; height: 38px; } .task-card { top: 82px; right: max(12px, env(safe-area-inset-right)); max-height: calc(100dvh - 94px - env(safe-area-inset-bottom)); width: 288px; } .controls-toggle { width: 44px; padding: 0; } .controls-toggle > span { display: none; } .yard-status { left: 12px; bottom: 12px; max-width: calc(100% - 326px); } }
+.intro-card { position: absolute; bottom: 58px; left: 50%; transform: translateX(-50%); width: 520px; max-width: calc(100% - 48px); padding: 22px 26px; border-radius: 18px; background: #fffdf3f2; border: 1px solid #fff; box-shadow: 0 10px 45px #254f5726; }
+.intro-card h2 { font-size: 27px; margin: 8px 0; letter-spacing: -.5px; }
+.intro-card > p:not(.eyebrow) { font-size: 14px; line-height: 1.5; color: var(--muted); margin: 0 0 14px; }
+.intro-actions { display: flex; align-items: center; gap: 20px; }
+.intro-actions .primary { width: 160px; justify-content: center; }
+.intro-actions .motion-option { white-space: nowrap; }
+.intro-playing .task-card, .intro-playing nav, .intro-playing .yard-status { visibility: hidden; }
+.build-identity { position: absolute; bottom: 0; left: 0; right: 0; padding: 6px 18px; min-height: 26px; background: #fffdf3eb; border-top: 1px solid #ccd8ce; color: #34565d; font: 10px/1.35 ui-monospace, Consolas, monospace; overflow-wrap: anywhere; user-select: text; }
+.yard-status { bottom: 42px; }
+.pair-summary { font-size: 11px; line-height: 1.5; margin: 0 0 12px; color: #526960; }
+.middle-equation { padding: 12px; background: #edf2e4; border-radius: 8px; font-size: 19px; font-weight: 800; color: var(--teal); }
+#use-middle { margin-top: 12px; }
+#next-shipment { margin: 12px 0 4px; }
+@media (max-width: 1000px), (max-height: 620px) { .app-header { top: max(12px, env(safe-area-inset-top)); left: max(12px, env(safe-area-inset-left)); right: max(12px, env(safe-area-inset-right)); } .brand { padding: 8px 11px 8px 8px; gap: 9px; } .brand h1 { font-size: 20px; } .brand small { font-size: 9px; letter-spacing: .3px; } .brand-mark { width: 35px; height: 38px; } .task-card { top: 82px; right: max(12px, env(safe-area-inset-right)); max-height: calc(100dvh - 94px - env(safe-area-inset-bottom)); width: 288px; } .controls-toggle { width: 44px; padding: 0; } .controls-toggle > span { display: none; } .yard-status { left: 12px; bottom: 42px; max-width: calc(100% - 326px); } }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* Direct scene review: instructions and core actions never require the side panel. */
+#scene-instructions { position: absolute; top: 98px; left: 24px; right: 24px; width: fit-content; max-width: calc(100% - 48px); padding: 10px 14px; border-radius: 10px; background: #fffdf3f0; pointer-events: none; }
+#scene-instructions p { margin: 0 0 4px; font-size: 15px; line-height: 1.35; font-weight: 700; }
+#scene-instructions small { font-size: 11px; line-height: 1.3; color: #526960; }
+.controls-open #scene-instructions { max-width: calc(100% - 380px); }
+#scene-dock { position: absolute; left: 24px; right: 24px; bottom: 38px; height: 156px; padding: 10px 14px; background: #fffdf3f2; border: 1px solid #fff; border-radius: 12px; display: flex; flex-direction: column; gap: 8px; }
+.lesson-result { height: 82px; flex: 1; min-height: 0; display: flex; gap: 16px; align-items: center; }
+.lesson-result .feedback { margin: 0; flex: 1; font-size: 13px; max-height: 82px; overflow: auto; }
+.scene-toolbar { display: flex; gap: 12px; align-items: center; height: 44px; flex-shrink: 0; }
+.scene-toolbar button { padding: 8px 14px; font-size: 12px; }
+.scene-toolbar .primary { width: auto; margin: 0; }
+.scene-shipment { flex: 1; max-width: 320px; min-width: 180px; }
+.scene-shipment label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.scene-shipment select { font-size: 12px; }
+.scene-toolbar .motion-option { white-space: nowrap; font-size: 12px; }
+#answer-form { margin: 0; display: grid; grid-template-columns: auto 125px 150px; gap: 4px 10px; align-items: center; width: min(650px, 72%); }
+#answer-form label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+#middle-equation { margin: 0; padding: 6px; font-size: 20px; background: none; white-space: nowrap; }
+#answer-form .primary { font-size: 12px; min-height: 44px; }
+#answer-hint { grid-column: 1 / -1; margin: 0; font-size: 12px; }
+#answer-form #middle-equation { grid-column: 1; grid-row: 1; }
+#answer-form .answer-field { grid-column: 2; grid-row: 1; }
+#answer-form button { grid-column: 3; grid-row: 1; }
+#answer-form #answer-hint { grid-row: 2; }
+.answer-field input { font-size: 21px; padding: 7px; }
+.answer-field span { padding: 7px; }
+.lesson-result .success { width: 100%; padding: 8px 14px; display: flex; align-items: center; justify-content: center; gap: 16px; text-align: left; }
+.lesson-result .success > strong { font-size: 38px; }
+.lesson-result .success p { margin: 0; max-width: 650px; font-size: 13px; }
+.lesson-result .success-icon { display: none; }
+.task-card { max-height: calc(100dvh - 310px); }
+.camera-controls { border: 0; padding: 10px 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.camera-controls legend { font-size: 12px; font-weight: bold; }
+.camera-controls button { font-size: 11px; }
+.intro-playing #scene-instructions, .intro-playing #scene-dock { visibility: hidden; }
+.build-identity { font-size: 11px; min-height: 30px; }
+@media (max-width: 1100px), (max-height: 650px) {
+  #scene-instructions { top: 80px; left: 12px; right: 12px; max-width: calc(100% - 24px); padding: 7px 10px; }
+  #scene-instructions p { font-size: 13px; }
+  #scene-instructions small { font-size: 10px; }
+  .controls-open #scene-instructions { max-width: calc(100% - 326px); }
+  #scene-dock { left: 12px; right: 12px; height: 144px; padding: 8px 10px; bottom: 36px; }
+  .lesson-result { gap: 8px; }
+  .lesson-result .feedback { font-size: 12px; }
+  .scene-toolbar { gap: 6px; }
+  .scene-toolbar button { padding: 5px 8px; font-size: 11px; }
+  #answer-form { grid-template-columns: auto 100px 132px; gap: 3px 6px; width: 66%; }
+  #middle-equation { font-size: 17px; }
+  #answer-hint { font-size: 11px; }
+  .task-card { max-height: calc(100dvh - 272px); }
+}

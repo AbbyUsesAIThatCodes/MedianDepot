@@ -1,0 +1,13 @@
+{
+  "identifier": "0.2.0_Uncodenamed_local-scene-20261003_build-002_20261003T230803Z_g5bc26ce24081_web",
+  "revision": "5bc26ce240810462395f1da28e19b783e73df1c5",
+  "sourceFingerprint": "8c873e54bc095df9a165042eadc07fbc76fe6a125eeb34b2f13deeef00903830",
+  "inputCount": 27,
+  "checks": [
+    "inventory checksum",
+    "every input length and SHA-256 matches committed bytes",
+    "Git/source/artifact aggregate fingerprints match",
+    "clean source revision"
+  ],
+  "checkedAt": "2026-10-03T23:08:04.514Z"
+}

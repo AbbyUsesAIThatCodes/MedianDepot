@@ -1,0 +1,14 @@
+{
+  "identifier": "0.2.0_Uncodenamed_local-scene-20261003_build-002_20261003T230803Z_g5bc26ce24081_web",
+  "browser": "153.0.8010.12",
+  "launch": "file:// standalone HTML",
+  "sourceRevision": "5bc26ce240810462395f1da28e19b783e73df1c5",
+  "dirty": false,
+  "result": "passed",
+  "checks": [
+    "artifact/manifest/UI/report identity match",
+    "full original shipment completion",
+    "no page errors",
+    "zero HTTP requests"
+  ]
+}

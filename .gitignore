@@ -3,3 +3,7 @@ dist/
 test-results/
 playwright-report/
 *.local
+.build/
+artifacts/
+docs/CURRENT_BUILD.md
+evidence/

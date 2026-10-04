@@ -1,56 +1,58 @@
-name: Check and Deploy
+name: Publish Locally Verified Pages
 
 on:
-  pull_request:
-  push:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      expected_build_id:
+        description: Exact build ID from deployment/payload.json
+        required: true
+        type: string
 
 permissions:
   contents: read
 
-jobs:
-  verify:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci
-      - run: npm test
-      - run: npm run build
-      - run: npx playwright install --with-deps chromium
-      - run: npm run test:browser
-      - name: Upload Browser Failure Details
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: browser-test-failures
-          path: test-results/
-          if-no-files-found: ignore
-          retention-days: 7
-      - uses: actions/upload-pages-artifact@v3
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-        with:
-          path: dist
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
 
+jobs:
   deploy:
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-    needs: verify
+    if: github.repository == 'AbbyUsesAIThatCodes/MedianDepot' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     permissions:
+      contents: read
       pages: write
       id-token: write
-    concurrency:
-      group: pages
-      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/configure-pages@v5
-      - name: Deploy to GitHub Pages
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            site
+            deployment
+      - name: Verify The Locally Tested Payload
+        run: node deployment/verify.mjs
+        env:
+          EXPECTED_BUILD_ID: ${{ inputs.expected_build_id }}
+      - name: Read Existing Pages Configuration
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
+        with:
+          enablement: false
+      - name: Upload One Small Pages Artifact
+        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
+        with:
+          path: site
+          retention-days: 1
+      - name: Publish The Identified Runtime
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
+      - name: Record The Published Identity
+        env:
+          BUILD_ID: ${{ inputs.expected_build_id }}
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          echo "Published $BUILD_ID to $PAGE_URL" >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,35 @@
+import { chromium } from '@playwright/test';
+import assert from 'node:assert/strict';
+import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
+const manifest = JSON.parse(await readFile('dist/build-manifest.json'));
+const artifact = path.join('artifacts', manifest.identifier);
+assert.deepEqual(JSON.parse(await readFile(path.join(artifact, 'build-manifest.json'))), manifest);
+const browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE, args: ['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader'] });
+const page = await browser.newPage({ viewport: { width: 1366, height: 768 }, reducedMotion: 'reduce' });
+const errors = [], network = [];
+page.on('pageerror', error => errors.push(error.message));
+page.on('request', request => { if (/^https?:/.test(request.url())) network.push(request.url()); });
+await page.goto(pathToFileURL(path.resolve(artifact, 'Play Median Depot.html')).href);
+await page.locator('#controls-toggle').click();
+await page.locator('#crate-select').waitFor({ state: 'visible' });
+assert.equal(await page.locator('#build-identity').textContent(), manifest.identifier);
+for (const [label, moves] of [['C02',1],['C05',3],['C04',2]]) {
+  await page.locator('#crate-select').selectOption(`MD-1-001-${label}`);
+  for (let i = 0; i < moves; i++) await page.locator('#move-left').click();
+}
+await page.locator('#check-order').click();
+await page.locator('#crate-select').selectOption('MD-1-001-C04');
+await page.locator('#use-middle').click();
+await page.locator('#success').waitFor({ state: 'visible' });
+assert.equal(await page.locator('#success-value').textContent(), '4');
+assert.deepEqual(errors, []);
+assert.deepEqual(network, []);
+assert.ok((await readFile('docs/CURRENT_BUILD.md','utf8')).includes(manifest.identifier));
+await mkdir('evidence', { recursive: true });
+await page.screenshot({ path: 'evidence/offline-build.png' });
+const report = { identifier: manifest.identifier, browser: await browser.version(), launch: 'file:// standalone HTML', sourceRevision: manifest.revision, dirty: manifest.dirty, result: 'passed', checks: ['artifact/manifest/UI/report identity match', 'full original shipment completion', 'no page errors', 'zero HTTP requests'] };
+await writeFile('evidence/offline-check.json', JSON.stringify(report, null, 2) + '\n');
+console.log(JSON.stringify(report, null, 2));
+await browser.close();

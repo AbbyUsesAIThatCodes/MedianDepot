@@ -13,3 +13,9 @@ Prioritize laptop-sized windows, browser fullscreen, mouse/trackpad dragging, an
 - Use Title Case for user-facing titles and interface labels.
 - Preserve immutable shipment IDs, quantities, and replay behavior when changing presentation.
 - Keep current controls, screenshots, and verification notes accurate. State actual device-test limitations.
+- Apply [Build Identity](docs/BUILD_IDENTITY.md) for artifact-producing work. Use the canonical build script and retain local allocation history; do not invent PR numbers or release codenames.
+- Shared sources in `src/shared/` follow [the frozen world contract](docs/SHARED-WORLD-CONTRACT.md). MeanMachine consumes byte-identical copies and a matching source manifest; gameplay changes belong outside the shared directory.
+
+## October 4 Approved Release
+
+The owner approved the bounded Pages update for this game. Follow [Locally Verified Pages Release](docs/LOCAL_PAGES_RELEASE.md): test locally, publish only the inventoried runtime, retain its original identity, and dispatch the manual-only workflow only after the deployment allowance/storage gate is satisfied. Earlier review-only prohibitions are preserved history. Preserve every original checkout, archive, ledger and browser save.

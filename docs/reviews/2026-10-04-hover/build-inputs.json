@@ -1,0 +1,142 @@
+{
+  "schema": 1,
+  "algorithm": "sha256(sorted UTF-8 relative path + raw file bytes; no separators)",
+  "sourceFingerprint": "5c7b551bac8418b6bc26e87ff8cc13fdeb5bdd6a53d81d0db3c6a918970915d5",
+  "inputs": [
+    {
+      "path": "index.html",
+      "bytes": 530,
+      "sha256": "519d6a71fd95f7d1ca19a2f3e9d7daa17c5a69420bceebb62527add2995f932f"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 26828,
+      "sha256": "fd68a4f8f4b83f40c916b98dfa90a1a5c6241800e6b0ffd949a1987f80c81552"
+    },
+    {
+      "path": "package.json",
+      "bytes": 466,
+      "sha256": "807207397e169e7573ce4df75458c5ad9dd3d1c3416c747a8e16e3e91d83c32e"
+    },
+    {
+      "path": "public/favicon.svg",
+      "bytes": 197,
+      "sha256": "8d8fcbdedc1e222b25da419c474f5998016742fb08d15fd271ea04efff903487"
+    },
+    {
+      "path": "public/licenses/three-LICENSE.txt",
+      "bytes": 1081,
+      "sha256": "8b378ebe60e2fe500158cb0ac71cb5e8b7d92953c2abcc63a0eb90499653b5bc"
+    },
+    {
+      "path": "release.json",
+      "bytes": 220,
+      "sha256": "5a13c606d1391d54b3be8b6d48d0b5ac6aeaa1426ba305a600be2c692e1a4a28"
+    },
+    {
+      "path": "scripts/build.mjs",
+      "bytes": 5841,
+      "sha256": "6a95b782af0786e0080ea808b2409f89eb1b4ffa917e20a4bece2af42dcc1de6"
+    },
+    {
+      "path": "scripts/capture-local.mjs",
+      "bytes": 1047,
+      "sha256": "fd3824fc622817dde5b90e9db99e510c92449c627a4e86a4d6853abe75d1c8d4"
+    },
+    {
+      "path": "scripts/identity.mjs",
+      "bytes": 1642,
+      "sha256": "0b8c14487d18cbbd4dae457e54dc8e7318565c0c80887466452fcf5d39ff1097"
+    },
+    {
+      "path": "scripts/inputs.mjs",
+      "bytes": 1331,
+      "sha256": "899bbbc027ce6dbf5bc8f0c4e66dd3f55e23059f732a6458049adc60b30cfe46"
+    },
+    {
+      "path": "scripts/shared-manifest.mjs",
+      "bytes": 1033,
+      "sha256": "7756af063e604297d4a50e7b3481b07444e882155461e4b6f295337824bd705e"
+    },
+    {
+      "path": "scripts/verify-build.mjs",
+      "bytes": 1880,
+      "sha256": "4efca1044cbe860be65fc5aa865901dadbc339bcce1dbb6e7929a89e2a9bc837"
+    },
+    {
+      "path": "scripts/verify-offline.mjs",
+      "bytes": 2476,
+      "sha256": "6c0cf3e984d6c0451979b16e4b894a735cc7615eec9123921bda0ed8541cbaf2"
+    },
+    {
+      "path": "src/build.js",
+      "bytes": 56,
+      "sha256": "072d1ee1de5ef7d8756e4fbadb855b246fe8e8d25aa93708ec2abf3fae7399ab"
+    },
+    {
+      "path": "src/game.js",
+      "bytes": 7693,
+      "sha256": "6e496461688e52d3bd62966ae3c4e073f5b22c69b42d37da8e82a88df0054be3"
+    },
+    {
+      "path": "src/main.js",
+      "bytes": 24948,
+      "sha256": "0f63694811eff4f26533203988311d78d2d31c6f78a89194964e075ae833a333"
+    },
+    {
+      "path": "src/pairs.js",
+      "bytes": 674,
+      "sha256": "7c738dc7f1a73d051ccf632cdd9dd5ec42dc48f6e8701d2ee60a5746e2c7abb9"
+    },
+    {
+      "path": "src/scene-cues.js",
+      "bytes": 2237,
+      "sha256": "35a28bf5173b078805f3084dcfa974113cab06442b9221d5b56d6e2ad4d4f499"
+    },
+    {
+      "path": "src/scene.js",
+      "bytes": 16425,
+      "sha256": "294536c4ffd5980904faac3c2fe10cd09d925aa1011f0bd7743cab989d11c3f6"
+    },
+    {
+      "path": "src/shared/camera.js",
+      "bytes": 1994,
+      "sha256": "e41dab2b7b8e28dee21c7e3dd859ac473d0c2ca11b6bdcac4acd651f55ceca29"
+    },
+    {
+      "path": "src/shared/cargo.js",
+      "bytes": 4620,
+      "sha256": "6ad117c13b406b73516a6bcde2641a21036556dbe11ac4f59d022d0ec484e2e3"
+    },
+    {
+      "path": "src/shared/manifest.json",
+      "bytes": 1104,
+      "sha256": "fac0e1c44eac8e9aed0550778cc4dad3458b6aeff8b45fc0d788f9a53193f479"
+    },
+    {
+      "path": "src/shared/palette.js",
+      "bytes": 801,
+      "sha256": "9b76fd8f78b3e51ddd88e9fe930be01657125e5287772102177d678fd71791fc"
+    },
+    {
+      "path": "src/shared/primitives.js",
+      "bytes": 3008,
+      "sha256": "44a9b57b4d3a3e48799c52375c29d8024c20e731c795ae9b40f958c6c7290678"
+    },
+    {
+      "path": "src/shared/world.js",
+      "bytes": 5299,
+      "sha256": "1f212faa56908be5719bddef6f4356704fc85b5353f2fc31fa598cccac573928"
+    },
+    {
+      "path": "src/style.css",
+      "bytes": 15589,
+      "sha256": "7468aba9bd9f82325661de11149bcabf1461f4531f311d0874b6974728caffd4"
+    },
+    {
+      "path": "vite.config.js",
+      "bytes": 805,
+      "sha256": "028182acd5eaf6aae0c6ee58b1a824023607e78907f34445b9a925a937354109"
+    }
+  ]
+}

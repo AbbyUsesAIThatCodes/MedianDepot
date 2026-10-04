@@ -1,0 +1,6 @@
+* text=auto eol=lf
+src/shared/* text eol=lf
+
+# Preserve the exact locally verified Pages bytes on every checkout.
+site/** -text -whitespace
+deployment/** text eol=lf

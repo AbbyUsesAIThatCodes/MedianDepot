@@ -1,0 +1,1087 @@
+[
+  {
+    "name": "sorted",
+    "focus": "shipment",
+    "order": [
+      {
+        "id": "MD-1-006-C04",
+        "quantity": 0
+      },
+      {
+        "id": "MD-1-006-C08",
+        "quantity": 1
+      },
+      {
+        "id": "MD-1-006-C02",
+        "quantity": 2
+      },
+      {
+        "id": "MD-1-006-C05",
+        "quantity": 4
+      },
+      {
+        "id": "MD-1-006-C06",
+        "quantity": 4
+      },
+      {
+        "id": "MD-1-006-C07",
+        "quantity": 6
+      },
+      {
+        "id": "MD-1-006-C03",
+        "quantity": 7
+      },
+      {
+        "id": "MD-1-006-C09",
+        "quantity": 8
+      },
+      {
+        "id": "MD-1-006-C01",
+        "quantity": 9
+      }
+    ],
+    "selectedId": "MD-1-006-C09",
+    "medianIds": [],
+    "hoveredId": "MD-1-006-C09",
+    "pallets": [
+      {
+        "id": "MD-1-006-C01",
+        "x": 1160.017724569826,
+        "y": 466.7262837050754,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C02",
+        "x": 447.4256240451302,
+        "y": 443.2820950828088,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C03",
+        "x": 917.657256152428,
+        "y": 458.7526554092037,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C04",
+        "x": 219.26856562317087,
+        "y": 435.775757152305,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C05",
+        "x": 563.21771103058,
+        "y": 447.09163987884847,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C06",
+        "x": 680.175164209568,
+        "y": 450.93952507304175,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C07",
+        "x": 798.3156654507511,
+        "y": 454.82633239659765,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C08",
+        "x": 332.78157200270186,
+        "y": 439.51032048900595,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C09",
+        "x": 1038.2183464272312,
+        "y": 462.7190998012022,
+        "hoverGlow": true,
+        "pairGlow": false,
+        "arrow": false
+      }
+    ]
+  },
+  {
+    "name": "middle-selected",
+    "focus": "shipment",
+    "order": [
+      {
+        "id": "MD-1-006-C04",
+        "quantity": 0
+      },
+      {
+        "id": "MD-1-006-C08",
+        "quantity": 1
+      },
+      {
+        "id": "MD-1-006-C02",
+        "quantity": 2
+      },
+      {
+        "id": "MD-1-006-C05",
+        "quantity": 4
+      },
+      {
+        "id": "MD-1-006-C06",
+        "quantity": 4
+      },
+      {
+        "id": "MD-1-006-C07",
+        "quantity": 6
+      },
+      {
+        "id": "MD-1-006-C03",
+        "quantity": 7
+      },
+      {
+        "id": "MD-1-006-C09",
+        "quantity": 8
+      },
+      {
+        "id": "MD-1-006-C01",
+        "quantity": 9
+      }
+    ],
+    "selectedId": "MD-1-006-C06",
+    "medianIds": [
+      "MD-1-006-C06"
+    ],
+    "hoveredId": "MD-1-006-C06",
+    "pallets": [
+      {
+        "id": "MD-1-006-C01",
+        "x": 1160.017724569826,
+        "y": 466.7262837050754,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C02",
+        "x": 447.4256240451302,
+        "y": 443.2820950828088,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C03",
+        "x": 917.657256152428,
+        "y": 458.7526554092037,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C04",
+        "x": 219.26856562317087,
+        "y": 435.775757152305,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C05",
+        "x": 563.21771103058,
+        "y": 447.09163987884847,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C06",
+        "x": 680.175164209568,
+        "y": 450.93952507304175,
+        "hoverGlow": true,
+        "pairGlow": true,
+        "arrow": true
+      },
+      {
+        "id": "MD-1-006-C07",
+        "x": 798.3156654507511,
+        "y": 454.82633239659765,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C08",
+        "x": 332.78157200270186,
+        "y": 439.51032048900595,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C09",
+        "x": 1038.2183464272312,
+        "y": 462.7190998012022,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      }
+    ]
+  },
+  {
+    "name": "second-left-hover",
+    "focus": "shipment",
+    "order": [
+      {
+        "id": "MD-1-006-C04",
+        "quantity": 0
+      },
+      {
+        "id": "MD-1-006-C08",
+        "quantity": 1
+      },
+      {
+        "id": "MD-1-006-C02",
+        "quantity": 2
+      },
+      {
+        "id": "MD-1-006-C05",
+        "quantity": 4
+      },
+      {
+        "id": "MD-1-006-C06",
+        "quantity": 4
+      },
+      {
+        "id": "MD-1-006-C07",
+        "quantity": 6
+      },
+      {
+        "id": "MD-1-006-C03",
+        "quantity": 7
+      },
+      {
+        "id": "MD-1-006-C09",
+        "quantity": 8
+      },
+      {
+        "id": "MD-1-006-C01",
+        "quantity": 9
+      }
+    ],
+    "selectedId": "MD-1-006-C06",
+    "medianIds": [
+      "MD-1-006-C06"
+    ],
+    "hoveredId": "MD-1-006-C08",
+    "pallets": [
+      {
+        "id": "MD-1-006-C01",
+        "x": 1160.017724569826,
+        "y": 466.7262837050754,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C02",
+        "x": 447.4256240451302,
+        "y": 443.2820950828088,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C03",
+        "x": 917.657256152428,
+        "y": 458.7526554092037,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C04",
+        "x": 219.26856562317087,
+        "y": 435.775757152305,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C05",
+        "x": 563.21771103058,
+        "y": 447.09163987884847,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C06",
+        "x": 680.175164209568,
+        "y": 450.93952507304175,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": true
+      },
+      {
+        "id": "MD-1-006-C07",
+        "x": 798.3156654507511,
+        "y": 454.82633239659765,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C08",
+        "x": 332.78157200270186,
+        "y": 439.51032048900595,
+        "hoverGlow": true,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C09",
+        "x": 1038.2183464272312,
+        "y": 462.7190998012022,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      }
+    ]
+  },
+  {
+    "name": "dropdown-clicked",
+    "focus": "shipment",
+    "order": [
+      {
+        "id": "MD-1-006-C04",
+        "quantity": 0
+      },
+      {
+        "id": "MD-1-006-C08",
+        "quantity": 1
+      },
+      {
+        "id": "MD-1-006-C02",
+        "quantity": 2
+      },
+      {
+        "id": "MD-1-006-C05",
+        "quantity": 4
+      },
+      {
+        "id": "MD-1-006-C06",
+        "quantity": 4
+      },
+      {
+        "id": "MD-1-006-C07",
+        "quantity": 6
+      },
+      {
+        "id": "MD-1-006-C03",
+        "quantity": 7
+      },
+      {
+        "id": "MD-1-006-C09",
+        "quantity": 8
+      },
+      {
+        "id": "MD-1-006-C01",
+        "quantity": 9
+      }
+    ],
+    "selectedId": "MD-1-006-C06",
+    "medianIds": [
+      "MD-1-006-C06"
+    ],
+    "hoveredId": null,
+    "pallets": [
+      {
+        "id": "MD-1-006-C01",
+        "x": 1160.017724569826,
+        "y": 466.7262837050754,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C02",
+        "x": 447.4256240451302,
+        "y": 443.2820950828088,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C03",
+        "x": 917.657256152428,
+        "y": 458.7526554092037,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C04",
+        "x": 219.26856562317087,
+        "y": 435.775757152305,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C05",
+        "x": 563.21771103058,
+        "y": 447.09163987884847,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C06",
+        "x": 680.175164209568,
+        "y": 450.93952507304175,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": true
+      },
+      {
+        "id": "MD-1-006-C07",
+        "x": 798.3156654507511,
+        "y": 454.82633239659765,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C08",
+        "x": 332.78157200270186,
+        "y": 439.51032048900595,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C09",
+        "x": 1038.2183464272312,
+        "y": 462.7190998012022,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      }
+    ]
+  },
+  {
+    "name": "pairs-off",
+    "focus": "show-pairs",
+    "order": [
+      {
+        "id": "MD-1-006-C04",
+        "quantity": 0
+      },
+      {
+        "id": "MD-1-006-C08",
+        "quantity": 1
+      },
+      {
+        "id": "MD-1-006-C02",
+        "quantity": 2
+      },
+      {
+        "id": "MD-1-006-C05",
+        "quantity": 4
+      },
+      {
+        "id": "MD-1-006-C06",
+        "quantity": 4
+      },
+      {
+        "id": "MD-1-006-C07",
+        "quantity": 6
+      },
+      {
+        "id": "MD-1-006-C03",
+        "quantity": 7
+      },
+      {
+        "id": "MD-1-006-C09",
+        "quantity": 8
+      },
+      {
+        "id": "MD-1-006-C01",
+        "quantity": 9
+      }
+    ],
+    "selectedId": "MD-1-006-C06",
+    "medianIds": [
+      "MD-1-006-C06"
+    ],
+    "hoveredId": null,
+    "pallets": [
+      {
+        "id": "MD-1-006-C01",
+        "x": 1160.017724569826,
+        "y": 466.7262837050754,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C02",
+        "x": 447.4256240451302,
+        "y": 443.2820950828088,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C03",
+        "x": 917.657256152428,
+        "y": 458.7526554092037,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C04",
+        "x": 219.26856562317087,
+        "y": 435.775757152305,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C05",
+        "x": 563.21771103058,
+        "y": 447.09163987884847,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C06",
+        "x": 680.175164209568,
+        "y": 450.93952507304175,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": true
+      },
+      {
+        "id": "MD-1-006-C07",
+        "x": 798.3156654507511,
+        "y": 454.82633239659765,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C08",
+        "x": 332.78157200270186,
+        "y": 439.51032048900595,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C09",
+        "x": 1038.2183464272312,
+        "y": 462.7190998012022,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      }
+    ]
+  },
+  {
+    "name": "pairs-on",
+    "focus": "show-pairs",
+    "order": [
+      {
+        "id": "MD-1-006-C04",
+        "quantity": 0
+      },
+      {
+        "id": "MD-1-006-C08",
+        "quantity": 1
+      },
+      {
+        "id": "MD-1-006-C02",
+        "quantity": 2
+      },
+      {
+        "id": "MD-1-006-C05",
+        "quantity": 4
+      },
+      {
+        "id": "MD-1-006-C06",
+        "quantity": 4
+      },
+      {
+        "id": "MD-1-006-C07",
+        "quantity": 6
+      },
+      {
+        "id": "MD-1-006-C03",
+        "quantity": 7
+      },
+      {
+        "id": "MD-1-006-C09",
+        "quantity": 8
+      },
+      {
+        "id": "MD-1-006-C01",
+        "quantity": 9
+      }
+    ],
+    "selectedId": "MD-1-006-C06",
+    "medianIds": [
+      "MD-1-006-C06"
+    ],
+    "hoveredId": null,
+    "pallets": [
+      {
+        "id": "MD-1-006-C01",
+        "x": 1160.017724569826,
+        "y": 466.7262837050754,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C02",
+        "x": 447.4256240451302,
+        "y": 443.2820950828088,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C03",
+        "x": 917.657256152428,
+        "y": 458.7526554092037,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C04",
+        "x": 219.26856562317087,
+        "y": 435.775757152305,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C05",
+        "x": 563.21771103058,
+        "y": 447.09163987884847,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C06",
+        "x": 680.175164209568,
+        "y": 450.93952507304175,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": true
+      },
+      {
+        "id": "MD-1-006-C07",
+        "x": 798.3156654507511,
+        "y": 454.82633239659765,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C08",
+        "x": 332.78157200270186,
+        "y": 439.51032048900595,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C09",
+        "x": 1038.2183464272312,
+        "y": 462.7190998012022,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      }
+    ]
+  },
+  {
+    "name": "keyboard-focus-over-hover",
+    "focus": "shipment",
+    "order": [
+      {
+        "id": "MD-1-006-C04",
+        "quantity": 0
+      },
+      {
+        "id": "MD-1-006-C08",
+        "quantity": 1
+      },
+      {
+        "id": "MD-1-006-C02",
+        "quantity": 2
+      },
+      {
+        "id": "MD-1-006-C05",
+        "quantity": 4
+      },
+      {
+        "id": "MD-1-006-C06",
+        "quantity": 4
+      },
+      {
+        "id": "MD-1-006-C07",
+        "quantity": 6
+      },
+      {
+        "id": "MD-1-006-C03",
+        "quantity": 7
+      },
+      {
+        "id": "MD-1-006-C09",
+        "quantity": 8
+      },
+      {
+        "id": "MD-1-006-C01",
+        "quantity": 9
+      }
+    ],
+    "selectedId": "MD-1-006-C06",
+    "medianIds": [
+      "MD-1-006-C06"
+    ],
+    "hoveredId": "MD-1-006-C08",
+    "pallets": [
+      {
+        "id": "MD-1-006-C01",
+        "x": 1160.017724569826,
+        "y": 466.7262837050754,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C02",
+        "x": 447.4256240451302,
+        "y": 443.2820950828088,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C03",
+        "x": 917.657256152428,
+        "y": 458.7526554092037,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C04",
+        "x": 219.26856562317087,
+        "y": 435.775757152305,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C05",
+        "x": 563.21771103058,
+        "y": 447.09163987884847,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C06",
+        "x": 680.175164209568,
+        "y": 450.93952507304175,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": true
+      },
+      {
+        "id": "MD-1-006-C07",
+        "x": 798.3156654507511,
+        "y": 454.82633239659765,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C08",
+        "x": 332.78157200270186,
+        "y": 439.51032048900595,
+        "hoverGlow": true,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C09",
+        "x": 1038.2183464272312,
+        "y": 462.7190998012022,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      }
+    ]
+  },
+  {
+    "name": "keyboard-reset-view",
+    "focus": "reset-view",
+    "order": [
+      {
+        "id": "MD-1-006-C04",
+        "quantity": 0
+      },
+      {
+        "id": "MD-1-006-C08",
+        "quantity": 1
+      },
+      {
+        "id": "MD-1-006-C02",
+        "quantity": 2
+      },
+      {
+        "id": "MD-1-006-C05",
+        "quantity": 4
+      },
+      {
+        "id": "MD-1-006-C06",
+        "quantity": 4
+      },
+      {
+        "id": "MD-1-006-C07",
+        "quantity": 6
+      },
+      {
+        "id": "MD-1-006-C03",
+        "quantity": 7
+      },
+      {
+        "id": "MD-1-006-C09",
+        "quantity": 8
+      },
+      {
+        "id": "MD-1-006-C01",
+        "quantity": 9
+      }
+    ],
+    "selectedId": "MD-1-006-C06",
+    "medianIds": [
+      "MD-1-006-C06"
+    ],
+    "hoveredId": "MD-1-006-C08",
+    "pallets": [
+      {
+        "id": "MD-1-006-C01",
+        "x": 1160.017724569826,
+        "y": 466.7262837050754,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C02",
+        "x": 447.4256240451302,
+        "y": 443.2820950828088,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C03",
+        "x": 917.657256152428,
+        "y": 458.7526554092037,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C04",
+        "x": 219.26856562317087,
+        "y": 435.775757152305,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C05",
+        "x": 563.21771103058,
+        "y": 447.09163987884847,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C06",
+        "x": 680.175164209568,
+        "y": 450.93952507304175,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": true
+      },
+      {
+        "id": "MD-1-006-C07",
+        "x": 798.3156654507511,
+        "y": 454.82633239659765,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C08",
+        "x": 332.78157200270186,
+        "y": 439.51032048900595,
+        "hoverGlow": true,
+        "pairGlow": true,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C09",
+        "x": 1038.2183464272312,
+        "y": 462.7190998012022,
+        "hoverGlow": false,
+        "pairGlow": true,
+        "arrow": false
+      }
+    ]
+  },
+  {
+    "name": "keyboard-replay",
+    "focus": "reset",
+    "order": [
+      {
+        "id": "MD-1-006-C01",
+        "quantity": 9
+      },
+      {
+        "id": "MD-1-006-C02",
+        "quantity": 2
+      },
+      {
+        "id": "MD-1-006-C03",
+        "quantity": 7
+      },
+      {
+        "id": "MD-1-006-C04",
+        "quantity": 0
+      },
+      {
+        "id": "MD-1-006-C05",
+        "quantity": 4
+      },
+      {
+        "id": "MD-1-006-C06",
+        "quantity": 4
+      },
+      {
+        "id": "MD-1-006-C07",
+        "quantity": 6
+      },
+      {
+        "id": "MD-1-006-C08",
+        "quantity": 1
+      },
+      {
+        "id": "MD-1-006-C09",
+        "quantity": 8
+      }
+    ],
+    "selectedId": null,
+    "medianIds": [],
+    "hoveredId": "MD-1-006-C08",
+    "pallets": [
+      {
+        "id": "MD-1-006-C01",
+        "x": 219.26856562317087,
+        "y": 435.775757152305,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C02",
+        "x": 332.78157200270186,
+        "y": 439.51032048900595,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C03",
+        "x": 447.4256240451302,
+        "y": 443.2820950828088,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C04",
+        "x": 563.21771103058,
+        "y": 447.09163987884847,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C05",
+        "x": 680.175164209568,
+        "y": 450.93952507304175,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C06",
+        "x": 798.3156654507511,
+        "y": 454.82633239659765,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C07",
+        "x": 917.657256152428,
+        "y": 458.7526554092037,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C08",
+        "x": 1038.2183464272312,
+        "y": 462.7190998012022,
+        "hoverGlow": true,
+        "pairGlow": false,
+        "arrow": false
+      },
+      {
+        "id": "MD-1-006-C09",
+        "x": 1160.017724569826,
+        "y": 466.7262837050754,
+        "hoverGlow": false,
+        "pairGlow": false,
+        "arrow": false
+      }
+    ]
+  }
+]
