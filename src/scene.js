@@ -28,7 +28,7 @@ export function createDepot(container, { onSelect, onMove, onActivate, onUnavail
   const world = createSharedWorld(); scene.add(world.root);
   const cargoRoot = new THREE.Group(), slotsRoot = new THREE.Group(), pairsRoot = new THREE.Group(); scene.add(cargoRoot, slotsRoot, pairsRoot);
   let current = null, pallets = new Map(), frame = 0, lastTime = 0;
-  let gesture = null, lastTap = null, hoveredId = null, pairsVisible = false;
+  let gesture = null, lastTap = null, hoveredId = null, hoverPointer = null, pairsVisible = false;
   let introActive = true, introStart = null, unavailable = false;
   let view = { ...DEFAULT_VIEW }, endpoint = { position: [8, 13, 26], target: [4, 1.5, 5], roll: 0 };
   let size = { width: 1, height: 1 }, framingCorners = [];
@@ -70,7 +70,18 @@ export function createDepot(container, { onSelect, onMove, onActivate, onUnavail
   function setHover(id) {
     if (hoveredId === id) return; hoveredId = id;
     for (const [key, item] of pallets) item.hoverGlow.visible = key === id;
+    if (!gesture) canvas.style.cursor = id ? 'grab' : 'default';
     requestDraw();
+  }
+  function rememberHoverPointer(event) {
+    hoverPointer = event.pointerType === 'touch' ? null : { clientX: event.clientX, clientY: event.clientY };
+  }
+  function clearHover() { hoverPointer = null; setHover(null); }
+  function refreshHover() {
+    if (gesture) return;
+    // A pallet may move under a stationary mouse, or an overlay may cover it.
+    const overCanvas = hoverPointer && document.elementFromPoint(hoverPointer.clientX, hoverPointer.clientY) === canvas;
+    setHover(overCanvas ? idAt(hoverPointer) : null);
   }
   function finishIntro(reason = 'skip') {
     if (!introActive) return;
@@ -117,17 +128,20 @@ export function createDepot(container, { onSelect, onMove, onActivate, onUnavail
   }
   function idAt(event) {
     if (introActive || unavailable) return null;
+    scene.updateMatrixWorld(true); camera.updateMatrixWorld(true);
     rayFor(event); let object = raycaster.intersectObjects(cargoRoot.children, true)[0]?.object;
     while (object && !object.userData.crateId) object = object.parent;
     return object?.userData.crateId ?? null;
   }
   canvas.addEventListener('pointerdown', event => {
     if (event.button !== 0 || gesture || introActive || unavailable || !event.isPrimary) return;
+    rememberHoverPointer(event);
     const id = idAt(event); setHover(event.pointerType === 'touch' ? null : id);
     gesture = { id, pointerId: event.pointerId, kind: id ? 'pallet' : 'camera', startX: event.clientX, startY: event.clientY, lastX: event.clientX, lastY: event.clientY, moved: false, pointerType: event.pointerType };
     if (id) onSelect(id); canvas.setPointerCapture(event.pointerId); canvas.style.cursor = id ? 'grabbing' : 'move'; event.preventDefault();
   });
   canvas.addEventListener('pointermove', event => {
+    rememberHoverPointer(event);
     if (!gesture) { const id = idAt(event); setHover(event.pointerType === 'touch' ? null : id); canvas.style.cursor = id ? 'grab' : 'default'; return; }
     if (event.pointerId !== gesture.pointerId || introActive) return;
     if (!gesture.moved && Math.hypot(event.clientX - gesture.startX, event.clientY - gesture.startY) < (gesture.pointerType === 'touch' ? 10 : 8)) return;
@@ -138,18 +152,20 @@ export function createDepot(container, { onSelect, onMove, onActivate, onUnavail
   });
   canvas.addEventListener('pointerup', event => {
     if (!gesture || event.pointerId !== gesture.pointerId) return;
+    rememberHoverPointer(event);
     const completed = gesture; finishGesture();
     if (!completed.moved && completed.id) {
       const now = performance.now();
       if (lastTap?.id === completed.id && now - lastTap.at < 400 && Math.hypot(event.clientX - lastTap.x, event.clientY - lastTap.y) < 14) { lastTap = null; onActivate?.(completed.id); }
       else lastTap = { id: completed.id, at: now, x: event.clientX, y: event.clientY };
     } else lastTap = null;
-    if (completed.pointerType === 'touch') setHover(null);
+    refreshHover();
   });
   canvas.addEventListener('dblclick', event => event.preventDefault());
-  canvas.addEventListener('pointerleave', () => { if (!gesture) setHover(null); });
-  for (const event of ['pointercancel', 'lostpointercapture']) canvas.addEventListener(event, () => { if (gesture) { lastTap = null; finishGesture(); } });
-  window.addEventListener('blur', () => { lastTap = null; finishGesture(); setHover(null); });
+  canvas.addEventListener('pointerleave', () => { if (!gesture) clearHover(); });
+  for (const event of ['pointercancel', 'lostpointercapture']) canvas.addEventListener(event, () => { if (gesture) { lastTap = null; finishGesture(); clearHover(); } });
+  document.addEventListener('keydown', clearHover);
+  window.addEventListener('blur', () => { lastTap = null; finishGesture(); clearHover(); });
   function requestDraw() { if (!frame && !unavailable) frame = requestAnimationFrame(draw); }
   function draw(now) {
     frame = 0; lastTime = now; let moving = false;
@@ -172,7 +188,7 @@ export function createDepot(container, { onSelect, onMove, onActivate, onUnavail
       } else { item.group.position.x = item.targetX; item.group.position.y = 0.28; }
       for (const light of [item.hoverGlow, item.pairGlow]) light.userData.veil.rotation.y = Math.atan2(camera.position.x - item.group.position.x, camera.position.z - item.group.position.z);
     });
-    renderer.render(scene, camera); if (moving) requestDraw();
+    refreshHover(); renderer.render(scene, camera); if (moving) requestDraw();
   }
   function resize() {
     const { width, height } = container.getBoundingClientRect(); if (!width || !height || unavailable) return;
@@ -181,7 +197,7 @@ export function createDepot(container, { onSelect, onMove, onActivate, onUnavail
     else { setProjection(); applyPose(endpoint); } requestDraw();
   }
   new ResizeObserver(resize).observe(container); resize();
-  document.addEventListener('visibilitychange', () => { if (document.hidden) { finishGesture(); lastTap = null; finishIntro('interrupted'); } else requestDraw(); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) { finishGesture(); lastTap = null; clearHover(); finishIntro('interrupted'); } else requestDraw(); });
   function project(point) { const p = point.clone().project(camera); return { x: (p.x + 1) / 2 * size.width, y: (1 - p.y) / 2 * size.height }; }
   function inspect() {
     scene.updateMatrixWorld(true); camera.updateMatrixWorld(true);
@@ -191,7 +207,7 @@ export function createDepot(container, { onSelect, onMove, onActivate, onUnavail
       view: { ...view }, limits: CAMERA_LIMITS, safeBounds: viewBounds(), framingCorners: framingCorners.map(project), gesture: gesture?.kind ?? null,
       pallets: [...pallets].map(([id, item]) => ({ id, quantity: item.group.userData.quantity, covered: item.group.userData.covered, visibleRings: item.group.getObjectByName('Load').children.filter(c => c.userData.fraction === 1).length, appearance: item.group.userData.appearance,
         ...project(item.group.localToWorld(new THREE.Vector3(0, 0.68, 1.06))), arrow: item.arrow.visible, arrowTip: project(item.arrow.localToWorld(new THREE.Vector3(0, -0.05, 0))),
-        hoverGlow: item.hoverGlow.visible, glowTransparent: item.hoverGlow.userData.material.transparent, glowDepthWrite: item.hoverGlow.userData.material.depthWrite, pairGlow: item.pairGlow.visible,
+        hoverGlow: item.hoverGlow.visible, glowTransparent: item.hoverGlow.userData.material.transparent, glowDepthWrite: item.hoverGlow.userData.material.depthWrite, pairGlow: item.pairGlow.visible, moving: item.moveAt !== null,
       })),
     };
   }
