@@ -33,3 +33,7 @@ The builder hashes the same sorted path/raw-byte algorithm used historically, no
 A failed or interrupted attempt keeps its reservation. Do not remove lock directories while an owning build is running. After an interrupted process is positively confirmed stopped, remove only its empty stale lock and retain the ledger. Reusing a ZIP, HTML file, or output folder does not allocate or relabel it.
 
 See [Verification](VERIFICATION.md) and the generated [Current Local Build](CURRENT_BUILD.md) for actual results. A local source checkpoint and a deployed build are separate records.
+
+## October 4 Local Pages Promotion
+
+[Locally Verified Pages Release](LOCAL_PAGES_RELEASE.md) is the current publication path. `site/` contains the unchanged identified runtime; `deployment/payload.json` records the separate deployment inventory. The manual-only workflow validates and publishes these bytes without rebuilding, relabeling or changing build counters. Runtime source and release-orchestration commit remain distinct.

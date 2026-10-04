@@ -1,5 +1,9 @@
 # Median Depot
 
+## October 4 Pages Release
+
+The owner has approved publishing the tested runtime. [Release Status And Procedure](docs/LOCAL_PAGES_RELEASE.md) supersedes the earlier review-only deployment restrictions below. Local validation and actual deployment remain separate gates.
+
 A 3D classroom game about **median**, in the rail yard beside Mean Machine's foam factory. Sort intact pallets, find the middle observation or observations, and average both middle values when the count is even.
 
 **Current Review:** Draft PR #17 follows the owner's build 007 review under Issue #12. Drag pallets directly, double-click to toggle yellow median arrows, select both middle pallets for an even row, and calculate their average in the visible scene controls. Background dragging rotates a bounded, automatically fitted camera. Optional Yard Controls preserves keyboard and touch alternatives. The frozen shared world, shipment IDs, quantities and original build 007 remain unchanged. This review is not deployed. See [Direct Scene Review](docs/SCENE-REVIEW.md).
