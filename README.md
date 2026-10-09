@@ -1,5 +1,7 @@
 # Median Depot
 
+**[Play MedianDepot Online](https://abbyusesaithatcodes.github.io/MedianDepot/)**
+
 ## October 4 Pages Release
 
 The owner has approved publishing the tested runtime. [Release Status And Procedure](docs/LOCAL_PAGES_RELEASE.md) supersedes the earlier review-only deployment restrictions below. Local validation and actual deployment remain separate gates.
